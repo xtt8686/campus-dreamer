@@ -2,63 +2,729 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>校园梦想家</title>
-    <link rel="manifest" href="manifest.json">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .container { text-align: center; padding: 2rem; background: rgba(255,255,255,0.95); border-radius: 24px; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
-        .logo { font-size: 4rem; margin-bottom: 1rem; }
-        h1 { font-size: 1.75rem; color: #1e293b; margin-bottom: 0.5rem; }
-        .subtitle { color: #64748b; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2rem; }
-        .btn { display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 1.5rem; margin-bottom: 0.75rem; border: none; border-radius: 12px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.25s; }
-        .btn-primary { background: #6366f1; color: white; }
-        .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
-        .btn-secondary { background: #f1f5f9; color: #475569; }
-        .btn-secondary:hover { background: #e2e8f0; }
-        .version { margin-top: 2rem; font-size: 0.75rem; color: #94a3b8; }
-        .loading { display: none; padding: 2rem; }
-        .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .game-frame { display: none; position: fixed; inset: 0; background: #f8fafc; }
-        .game-frame iframe { width: 100%; height: 100%; border: none; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园梦想家 - Campus Dreamer</title>
+    <meta name="description" content="一款以学校为背景的模拟经营游戏，选择你的角色，实现校园梦想">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <div id="start">
-        <div class="container">
-            <div class="logo">🏫</div>
-            <h1>校园梦想家</h1>
-            <p class="subtitle">Campus Dreamer</p>
-            <button class="btn btn-primary" onclick="startGame()">
-                <span>🎮</span> 新游戏
-            </button>
-            <button class="btn btn-secondary" onclick="startGame()">
-                <span>📚</span> 继续游戏
-            </button>
-            <p class="version">v1.0 - 开发中</p>
+    <div id="app">
+        <!-- 开始界面 -->
+        <div id="start-screen" class="screen active">
+            <div class="start-container">
+                <div class="logo-section">
+                    <div class="logo-icon">🏫</div>
+                    <h1 class="game-title">校园梦想家</h1>
+                    <p class="game-subtitle">Campus Dreamer</p>
+                </div>
+                
+                <div class="start-menu">
+                    <button class="menu-btn primary" id="btn-new-game">
+                        <span class="btn-icon">🎮</span>
+                        <span class="btn-text">新游戏</span>
+                    </button>
+                    <button class="menu-btn" id="btn-continue" disabled>
+                        <span class="btn-icon">📚</span>
+                        <span class="btn-text">继续游戏</span>
+                    </button>
+                    <button class="menu-btn" id="btn-settings">
+                        <span class="btn-icon">⚙️</span>
+                        <span class="btn-text">游戏设置</span>
+                    </button>
+                </div>
+
+                <div class="version-info">v1.0 - 开发中</div>
+            </div>
+
+            <div class="start-decoration">
+                <div class="floating-element" style="--delay: 0s; --x: 10%; --y: 20%;">📖</div>
+                <div class="floating-element" style="--delay: 1s; --x: 85%; --y: 15%;">✏️</div>
+                <div class="floating-element" style="--delay: 2s; --x: 15%; --y: 70%;">🎓</div>
+                <div class="floating-element" style="--delay: 0.5s; --x: 80%; --y: 75%;">🏆</div>
+                <div class="floating-element" style="--delay: 1.5s; --x: 50%; --y: 85%;">⭐</div>
+            </div>
         </div>
-    </div>
-    <div id="loading" class="loading">
-        <div class="container">
-            <div class="spinner"></div>
-            <p>加载中...</p>
+
+        <!-- 角色创建界面 -->
+        <div id="create-screen" class="screen">
+            <div class="create-container">
+                <div class="create-header">
+                    <button class="back-btn" id="btn-back-to-start">← 返回</button>
+                    <h2>创建角色</h2>
+                </div>
+
+                <div class="create-content">
+                    <!-- 角色类型选择 -->
+                    <div class="create-section">
+                        <h3 class="section-title">选择你的角色</h3>
+                        <div class="character-grid">
+                            <div class="character-card selected" data-type="student">
+                                <div class="card-icon">👨‍🎓</div>
+                                <div class="card-title">学生</div>
+                                <div class="card-desc">努力学习，迎接考试，实现大学梦想</div>
+                            </div>
+                            <div class="character-card" data-type="teacher">
+                                <div class="card-icon">👨‍🏫</div>
+                                <div class="card-title">教师</div>
+                                <div class="card-desc">备课教学，出题考试，晋升职称</div>
+                            </div>
+                            <div class="character-card" data-type="principal">
+                                <div class="card-icon">👨‍💼</div>
+                                <div class="card-title">校长</div>
+                                <div class="card-desc">管理学校，招聘人才，打造名校</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 基础信息 -->
+                    <div class="create-section" id="basic-info">
+                        <h3 class="section-title">基础信息</h3>
+                        <div class="form-group">
+                            <label for="player-name">姓名</label>
+                            <input type="text" id="player-name" placeholder="输入你的名字" maxlength="10">
+                        </div>
+                    </div>
+
+                    <!-- 学生特有选项 -->
+                    <div class="create-section" id="student-options">
+                        <h3 class="section-title">学生设置</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>性别</label>
+                                <div class="radio-group">
+                                    <label class="radio-item">
+                                        <input type="radio" name="gender" value="male" checked>
+                                        <span>男</span>
+                                    </label>
+                                    <label class="radio-item">
+                                        <input type="radio" name="gender" value="female">
+                                        <span>女</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="grade">年级</label>
+                                <select id="grade">
+                                    <option value="7">初一</option>
+                                    <option value="8">初二</option>
+                                    <option value="9">初三</option>
+                                    <option value="10">高一</option>
+                                    <option value="11">高二</option>
+                                    <option value="12">高三</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>性格类型</label>
+                            <div class="trait-grid">
+                                <div class="trait-card selected" data-trait="balanced">
+                                    <div class="trait-icon">⚖️</div>
+                                    <div class="trait-name">均衡型</div>
+                                    <div class="trait-effect">各方面平衡发展</div>
+                                </div>
+                                <div class="trait-card" data-trait="diligent">
+                                    <div class="trait-icon">📚</div>
+                                    <div class="trait-name">勤奋型</div>
+                                    <div class="trait-effect">学习效率+20%</div>
+                                </div>
+                                <div class="trait-card" data-trait="social">
+                                    <div class="trait-icon">🤝</div>
+                                    <div class="trait-name">社交型</div>
+                                    <div class="trait-effect">人际关系+30%</div>
+                                </div>
+                                <div class="trait-card" data-trait="science">
+                                    <div class="trait-icon">🔬</div>
+                                    <div class="trait-name">理科型</div>
+                                    <div class="trait-effect">数理化+25%</div>
+                                </div>
+                                <div class="trait-card" data-trait="arts">
+                                    <div class="trait-icon">📖</div>
+                                    <div class="trait-name">文科型</div>
+                                    <div class="trait-effect">语英史+25%</div>
+                                </div>
+                                <div class="trait-card" data-trait="creative">
+                                    <div class="trait-icon">🎨</div>
+                                    <div class="trait-name">创意型</div>
+                                    <div class="trait-effect">艺体+25%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>发展方向</label>
+                            <div class="direction-grid">
+                                <label class="direction-item">
+                                    <input type="radio" name="direction" value="science" checked>
+                                    <span>🔬 理科方向</span>
+                                </label>
+                                <label class="direction-item">
+                                    <input type="radio" name="direction" value="arts">
+                                    <span>📖 文科方向</span>
+                                </label>
+                                <label class="direction-item">
+                                    <input type="radio" name="direction" value="sports">
+                                    <span>⚽ 艺体方向</span>
+                                </label>
+                                <label class="direction-item">
+                                    <input type="radio" name="direction" value="all">
+                                    <span>⚖️ 全面发展</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 教师特有选项 -->
+                    <div class="create-section hidden" id="teacher-options">
+                        <h3 class="section-title">教师设置</h3>
+                        <div class="form-group">
+                            <label>教授科目</label>
+                            <select id="subject">
+                                <option value="chinese">语文</option>
+                                <option value="math" selected>数学</option>
+                                <option value="english">英语</option>
+                                <option value="physics">物理</option>
+                                <option value="chemistry">化学</option>
+                                <option value="biology">生物</option>
+                                <option value="history">历史</option>
+                                <option value="geography">地理</option>
+                                <option value="art">美术</option>
+                                <option value="music">音乐</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>教学模式</label>
+                            <div class="mode-grid">
+                                <div class="mode-card selected" data-mode="professional">
+                                    <div class="mode-icon">✏️</div>
+                                    <div class="mode-title">职业教师</div>
+                                    <div class="mode-desc">真实答题备课，手动操作复杂，成就感高</div>
+                                </div>
+                                <div class="mode-card" data-mode="casual">
+                                    <div class="mode-icon">🎯</div>
+                                    <div class="mode-title">非职业教师</div>
+                                    <div class="mode-desc">自动备课上课，简单方便，适合休闲</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 校长特有选项 -->
+                    <div class="create-section hidden" id="principal-options">
+                        <h3 class="section-title">校长设置</h3>
+                        <div class="form-group">
+                            <label>专注科室</label>
+                            <div class="department-grid">
+                                <div class="department-card selected" data-dept="academic">
+                                    <div class="dept-icon">📚</div>
+                                    <div class="dept-name">教务处</div>
+                                    <div class="dept-desc">教学管理</div>
+                                </div>
+                                <div class="department-card" data-dept="student">
+                                    <div class="dept-icon">🎯</div>
+                                    <div class="dept-name">政教处</div>
+                                    <div class="dept-desc">学生管理</div>
+                                </div>
+                                <div class="department-card" data-dept="logistics">
+                                    <div class="dept-icon">🔧</div>
+                                    <div class="dept-name">总务处</div>
+                                    <div class="dept-desc">后勤保障</div>
+                                </div>
+                                <div class="department-card" data-dept="research">
+                                    <div class="dept-icon">🔬</div>
+                                    <div class="dept-name">教研室</div>
+                                    <div class="dept-desc">教研培训</div>
+                                </div>
+                                <div class="department-card" data-dept="office">
+                                    <div class="dept-icon">📋</div>
+                                    <div class="dept-name">办公室</div>
+                                    <div class="dept-desc">行政事务</div>
+                                </div>
+                                <div class="department-card" data-dept="finance">
+                                    <div class="dept-icon">💰</div>
+                                    <div class="dept-name">财务处</div>
+                                    <div class="dept-desc">财务管理</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="confirm-btn" id="btn-confirm-create">
+                        <span>开始游戏</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- 主游戏界面 -->
+        <div id="game-screen" class="screen">
+            <!-- 顶部栏 -->
+            <header class="game-header">
+                <div class="header-left">
+                    <div class="player-info">
+                        <div class="player-avatar" id="player-avatar">👨‍🎓</div>
+                        <div class="player-details">
+                            <div class="player-name" id="player-name-display">陈小明</div>
+                            <div class="player-role" id="player-role-display">初一学生</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-center">
+                    <div class="time-display">
+                        <div class="date-info">
+                            <span class="semester" id="semester-display">2024学年 第一学期</span>
+                            <span class="date" id="date-display">第1周 周一</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="time-progress" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="speed-control">
+                        <button class="speed-btn" data-speed="1">1x</button>
+                        <button class="speed-btn active" data-speed="1">▶️</button>
+                        <button class="speed-btn" data-speed="2">2x</button>
+                        <button class="speed-btn" data-speed="4">4x</button>
+                        <button class="speed-btn" data-speed="8">8x</button>
+                        <button class="speed-btn" data-speed="16">16x</button>
+                    </div>
+                    <button class="notification-btn" id="btn-notifications">🔔</button>
+                    <button class="settings-btn" id="btn-game-settings">⚙️</button>
+                </div>
+            </header>
+
+            <!-- 主内容区 -->
+            <main class="game-main">
+                <!-- 左侧导航 -->
+                <nav class="game-nav">
+                    <button class="nav-btn active" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">主页</span>
+                    </button>
+                    <button class="nav-btn" data-page="study" id="nav-study">
+                        <span class="nav-icon">📖</span>
+                        <span class="nav-text">学习</span>
+                    </button>
+                    <button class="nav-btn" data-page="exam" id="nav-exam">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-text">考试</span>
+                    </button>
+                    <button class="nav-btn" data-page="social" id="nav-social">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">社交</span>
+                    </button>
+                    <button class="nav-btn" data-page="activity" id="nav-activity">
+                        <span class="nav-icon">🎭</span>
+                        <span class="nav-text">活动</span>
+                    </button>
+                    <button class="nav-btn" data-page="achievements">
+                        <span class="nav-icon">🏆</span>
+                        <span class="nav-text">成就</span>
+                    </button>
+                </nav>
+
+                <!-- 内容区域 -->
+                <div class="game-content" id="game-content">
+                    <!-- 仪表盘页面 -->
+                    <div class="page active" id="page-dashboard">
+                        <div class="dashboard-grid">
+                            <!-- 今日状态 -->
+                            <div class="dashboard-card status-card">
+                                <h3 class="card-title">📊 今日状态</h3>
+                                <div class="status-grid">
+                                    <div class="status-item">
+                                        <div class="status-label">心情</div>
+                                        <div class="status-bar">
+                                            <div class="status-fill" style="width: 85%; background: #4CAF50;"></div>
+                                        </div>
+                                        <div class="status-value">85%</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-label">体力</div>
+                                        <div class="status-bar">
+                                            <div class="status-fill" style="width: 72%; background: #2196F3;"></div>
+                                        </div>
+                                        <div class="status-value">72%</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-label">学习效率</div>
+                                        <div class="status-bar">
+                                            <div class="status-fill" style="width: 68%; background: #FF9800;"></div>
+                                        </div>
+                                        <div class="status-value">68%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 今日课程 -->
+                            <div class="dashboard-card schedule-card">
+                                <h3 class="card-title">📅 今日课程</h3>
+                                <div class="schedule-list" id="today-schedule">
+                                    <div class="schedule-item">
+                                        <span class="schedule-time">08:00</span>
+                                        <span class="schedule-subject">语文</span>
+                                        <span class="schedule-status completed">已完成</span>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <span class="schedule-time">09:00</span>
+                                        <span class="schedule-subject">数学</span>
+                                        <span class="schedule-status current">上课中</span>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <span class="schedule-time">10:00</span>
+                                        <span class="schedule-subject">英语</span>
+                                        <span class="schedule-status">待上</span>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <span class="schedule-time">11:00</span>
+                                        <span class="schedule-subject">历史</span>
+                                        <span class="schedule-status">待上</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 今日待办 -->
+                            <div class="dashboard-card todo-card">
+                                <h3 class="card-title">📋 今日待办</h3>
+                                <div class="todo-list" id="todo-list">
+                                    <div class="todo-item completed">
+                                        <input type="checkbox" checked>
+                                        <span>完成数学作业</span>
+                                    </div>
+                                    <div class="todo-item">
+                                        <input type="checkbox">
+                                        <span>复习英语单词</span>
+                                    </div>
+                                    <div class="todo-item">
+                                        <input type="checkbox">
+                                        <span>整理物理笔记</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 成绩概览 -->
+                            <div class="dashboard-card grades-card">
+                                <h3 class="card-title">📈 成绩概览</h3>
+                                <div class="grades-chart" id="grades-chart">
+                                    <div class="grade-item">
+                                        <span class="grade-subject">语文</span>
+                                        <div class="grade-bar">
+                                            <div class="grade-fill" style="width: 92%;">92</div>
+                                        </div>
+                                    </div>
+                                    <div class="grade-item">
+                                        <span class="grade-subject">数学</span>
+                                        <div class="grade-bar">
+                                            <div class="grade-fill" style="width: 85%;">85</div>
+                                        </div>
+                                    </div>
+                                    <div class="grade-item">
+                                        <span class="grade-subject">英语</span>
+                                        <div class="grade-bar">
+                                            <div class="grade-fill" style="width: 88%;">88</div>
+                                        </div>
+                                    </div>
+                                    <div class="grade-item">
+                                        <span class="grade-subject">物理</span>
+                                        <div class="grade-bar">
+                                            <div class="grade-fill" style="width: 78%;">78</div>
+                                        </div>
+                                    </div>
+                                    <div class="grade-item">
+                                        <span class="grade-subject">化学</span>
+                                        <div class="grade-bar">
+                                            <div class="grade-fill" style="width: 82%;">82</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grade-rank">
+                                    年级排名：<strong>第23名</strong> / 200人
+                                </div>
+                            </div>
+
+                            <!-- 社交动态 -->
+                            <div class="dashboard-card social-card">
+                                <h3 class="card-title">💬 社交动态</h3>
+                                <div class="social-feeds" id="social-feeds">
+                                    <div class="feed-item">
+                                        <div class="feed-avatar">👧</div>
+                                        <div class="feed-content">
+                                            <div class="feed-text">林小雨邀请你一起学习</div>
+                                            <div class="feed-time">刚刚</div>
+                                        </div>
+                                    </div>
+                                    <div class="feed-item">
+                                        <div class="feed-avatar">👨‍🏫</div>
+                                        <div class="feed-content">
+                                            <div class="feed-text">王老师表扬了你</div>
+                                            <div class="feed-time">10分钟前</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 快捷操作 -->
+                            <div class="dashboard-card actions-card">
+                                <h3 class="card-title">⚡ 快捷操作</h3>
+                                <div class="action-buttons">
+                                    <button class="action-btn" id="btn-quick-study">
+                                        <span class="action-icon">📚</span>
+                                        <span class="action-text">自习</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-quick-exam">
+                                        <span class="action-icon">📝</span>
+                                        <span class="action-text">做题</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-quick-rest">
+                                        <span class="action-icon">😴</span>
+                                        <span class="action-text">休息</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-quick-social">
+                                        <span class="action-icon">💬</span>
+                                        <span class="action-text">聊天</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学习页面 -->
+                    <div class="page" id="page-study">
+                        <div class="study-container">
+                            <h2>📖 学习中心</h2>
+                            <div class="study-options">
+                                <div class="study-card" id="study-attend-class">
+                                    <div class="study-icon">🏫</div>
+                                    <div class="study-title">上课</div>
+                                    <div class="study-desc">参加课程学习</div>
+                                </div>
+                                <div class="study-card" id="study-self-study">
+                                    <div class="study-icon">📚</div>
+                                    <div class="study-title">自习</div>
+                                    <div class="study-desc">自主复习预习</div>
+                                </div>
+                                <div class="study-card" id="study-homework">
+                                    <div class="study-icon">✏️</div>
+                                    <div class="study-title">作业</div>
+                                    <div class="study-desc">完成每日作业</div>
+                                </div>
+                                <div class="study-card" id="study-library">
+                                    <div class="study-icon">📖</div>
+                                    <div class="study-title">图书馆</div>
+                                    <div class="study-desc">查阅资料书籍</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 考试页面 -->
+                    <div class="page" id="page-exam">
+                        <div class="exam-container">
+                            <h2>📝 考试中心</h2>
+                            <div class="exam-info">
+                                <div class="exam-card upcoming">
+                                    <h3>即将到来的考试</h3>
+                                    <div class="exam-details">
+                                        <div class="exam-name">数学月考</div>
+                                        <div class="exam-time">明天 08:00</div>
+                                        <div class="exam-range">范围：一元二次方程、二次函数</div>
+                                        <div class="exam-actions">
+                                            <button class="exam-btn primary" id="btn-exam-prepare">备考复习</button>
+                                            <button class="exam-btn" id="btn-exam-skip">跳过考试</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="exam-card past">
+                                    <h3>近期考试成绩</h3>
+                                    <div class="exam-results">
+                                        <div class="exam-result">
+                                            <span class="result-name">期中考试 - 数学</span>
+                                            <span class="result-score">87分 (B+)</span>
+                                        </div>
+                                        <div class="exam-result">
+                                            <span class="result-name">期中考试 - 语文</span>
+                                            <span class="result-score">92分 (A)</span>
+                                        </div>
+                                        <div class="exam-result">
+                                            <span class="result-name">周考 - 英语</span>
+                                            <span class="result-score">85分 (B)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 社交页面 -->
+                    <div class="page" id="page-social">
+                        <div class="social-container">
+                            <h2>👥 社交中心</h2>
+                            <div class="social-tabs">
+                                <button class="social-tab active" data-tab="classmates">同学</button>
+                                <button class="social-tab" data-tab="teachers">老师</button>
+                                <button class="social-tab" data-tab="family">家人</button>
+                            </div>
+                            <div class="social-list" id="social-list">
+                                <div class="friend-card">
+                                    <div class="friend-avatar">👧</div>
+                                    <div class="friend-info">
+                                        <div class="friend-name">林小雨</div>
+                                        <div class="friend-relation">❤️ 知己</div>
+                                    </div>
+                                    <div class="friend-score">95</div>
+                                </div>
+                                <div class="friend-card">
+                                    <div class="friend-avatar">😎</div>
+                                    <div class="friend-info">
+                                        <div class="friend-name">张伟</div>
+                                        <div class="friend-relation">🤝 学友</div>
+                                    </div>
+                                    <div class="friend-score">88</div>
+                                </div>
+                                <div class="friend-card">
+                                    <div class="friend-avatar">👨‍🏫</div>
+                                    <div class="friend-info">
+                                        <div class="friend-name">王老师</div>
+                                        <div class="friend-relation">⭐ 欣赏</div>
+                                    </div>
+                                    <div class="friend-score">88</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 活动页面 -->
+                    <div class="page" id="page-activity">
+                        <div class="activity-container">
+                            <h2>🎭 活动中心</h2>
+                            <div class="activity-grid">
+                                <div class="activity-card">
+                                    <div class="activity-icon">🏃</div>
+                                    <div class="activity-title">体育课</div>
+                                    <div class="activity-desc">今天下午 14:00</div>
+                                    <button class="activity-btn">参加活动</button>
+                                </div>
+                                <div class="activity-card">
+                                    <div class="activity-icon">🎨</div>
+                                    <div class="activity-title">美术社活动</div>
+                                    <div class="activity-desc">周三下午 16:00</div>
+                                    <button class="activity-btn">报名参加</button>
+                                </div>
+                                <div class="activity-card">
+                                    <div class="activity-icon">🏆</div>
+                                    <div class="activity-title">校运动会</div>
+                                    <div class="activity-desc">下周一、周二</div>
+                                    <button class="activity-btn">报名项目</button>
+                                </div>
+                                <div class="activity-card">
+                                    <div class="activity-icon">🎵</div>
+                                    <div class="activity-title">校园歌手赛</div>
+                                    <div class="activity-desc">本月月底</div>
+                                    <button class="activity-btn">了解详情</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 成就页面 -->
+                    <div class="page" id="page-achievements">
+                        <div class="achievements-container">
+                            <h2>🏆 成就中心</h2>
+                            <div class="achievement-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">5</div>
+                                    <div class="stat-label">已解锁</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-label">进行中</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">45</div>
+                                    <div class="stat-label">未解锁</div>
+                                </div>
+                            </div>
+                            <div class="achievement-list">
+                                <div class="achievement-item unlocked">
+                                    <div class="achievement-icon">🎖️</div>
+                                    <div class="achievement-info">
+                                        <div class="achievement-name">全面发展</div>
+                                        <div class="achievement-desc">首次所有科目及格</div>
+                                    </div>
+                                    <div class="achievement-badge">已解锁</div>
+                                </div>
+                                <div class="achievement-item unlocked">
+                                    <div class="achievement-icon">📚</div>
+                                    <div class="achievement-info">
+                                        <div class="achievement-name">学霸初现</div>
+                                        <div class="achievement-desc">年级排名前30</div>
+                                    </div>
+                                    <div class="achievement-badge">已解锁</div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon">🤝</div>
+                                    <div class="achievement-info">
+                                        <div class="achievement-name">社交达人</div>
+                                        <div class="achievement-desc">认识10位新同学</div>
+                                    </div>
+                                    <div class="achievement-progress">7/10</div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon">🏃</div>
+                                    <div class="achievement-info">
+                                        <div class="achievement-name">体育健将</div>
+                                        <div class="achievement-desc">运动会获得奖牌</div>
+                                    </div>
+                                    <div class="achievement-progress">0/1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 通知面板 -->
+            <div class="notification-panel hidden" id="notification-panel">
+                <div class="panel-header">
+                    <h3>通知</h3>
+                    <button class="panel-close" id="btn-close-notifications">×</button>
+                </div>
+                <div class="notification-list" id="notification-list">
+                    <div class="notification-item">
+                        <div class="notification-icon">📢</div>
+                        <div class="notification-content">
+                            <div class="notification-title">明天有数学月考</div>
+                            <div class="notification-time">10分钟前</div>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon">👧</div>
+                        <div class="notification-content">
+                            <div class="notification-title">林小雨邀请你一起学习</div>
+                            <div class="notification-time">30分钟前</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框容器 -->
+        <div class="modal-container hidden" id="modal-container">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content" id="modal-content">
+                <!-- 模态框内容会动态插入 -->
+            </div>
+        </div>
+
+        <!-- Toast通知 -->
+        <div class="toast-container" id="toast-container"></div>
     </div>
-    <div id="game" class="game-frame">
-        <iframe id="gameFrame"></iframe>
-    </div>
-    <script>
-        function startGame() {
-            document.getElementById('start').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('game').style.display = 'block';
-                document.getElementById('gameFrame').src = 'index.html';
-            }, 500);
-        }
-    </script>
+
+    <script src="scripts/app.js" type="module"></script>
 </body>
 </html>
