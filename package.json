@@ -1,0 +1,17 @@
+{
+  "name": "campus-dreamer",
+  "version": "1.0.0",
+  "description": "校园梦想家 - Campus Dreamer",
+  "scripts": {
+    "build": "npm run copy && npx cap copy",
+    "android": "npm run build && npx cap open android",
+    "copy": "cp -r ../index.html ../styles ../scripts ../manifest.json . && mkdir -p www"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/core": "^6.0.0"
+  }
+}
