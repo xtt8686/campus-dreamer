@@ -37,11 +37,15 @@ jobs:
     - name: Build debug APK
       run: |
         cd android
-        ./gradlew assembleDebug --no-daemon 2>&1 || ./gradlew assembleDebug --info 2>&1 | tail -100
+        ./gradlew assembleDebug --no-daemon 2>&1
+        echo "=== Build output directory ==="
+        find . -name "*.apk" -type f 2>/dev/null
+        echo "=== Checking outputs folder ==="
+        ls -la app/build/outputs/ 2>/dev/null || echo "No outputs folder"
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: campus-dreamer-apk
-        path: android/app/build/outputs/apk/debug/*.apk
+        path: android/app/build/outputs/apk/debug/
         retention-days: 7
