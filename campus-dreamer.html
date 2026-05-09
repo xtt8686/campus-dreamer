@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>校园梦想家 - Campus Dreamer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
 :root {
     --primary: #6366f1;
@@ -14,10 +14,13 @@
     --primary-50: #eef2ff;
     --primary-100: #e0e7ff;
     --secondary: #10b981;
+    --secondary-light: #34d399;
     --accent: #f59e0b;
+    --accent-light: #fbbf24;
+    --danger: #ef4444;
+    --danger-light: #f87171;
     --success: #10b981;
     --warning: #f59e0b;
-    --error: #ef4444;
     --info: #3b82f6;
     --white: #ffffff;
     --gray-50: #f8fafc;
@@ -30,313 +33,1057 @@
     --gray-700: #334155;
     --gray-800: #1e293b;
     --gray-900: #0f172a;
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    --radius-xs: 4px;
-    --radius-sm: 6px;
-    --radius: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-2xl: 32px;
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    --gradient-secondary: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+    --gradient-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    --gradient-rose: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    --gradient-sky: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    --shadow-glow: 0 0 40px rgba(99,102,241,0.4), 0 0 80px rgba(99,102,241,0.2);
+    --shadow-glow-sm: 0 0 20px rgba(99,102,241,0.3), 0 0 40px rgba(99,102,241,0.15);
+    --shadow-glow-lg: 0 0 60px rgba(99,102,241,0.5), 0 0 120px rgba(99,102,241,0.3);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
     --radius-full: 9999px;
-    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-    --z-modal: 500;
-    --z-toast: 800;
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-button { font-family: inherit; font-size: inherit; border: none; cursor: pointer; background: none; }
-button:disabled { cursor: not-allowed; }
-input, select, textarea { font-family: inherit; font-size: inherit; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
-    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--gray-800);
-    background: var(--gray-50);
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gray-900);
+    color: var(--white);
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 ::selection { background: var(--primary); color: var(--white); }
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: var(--radius-full); }
-#app { min-height: 100vh; position: relative; }
-.screen { display: none; min-height: 100vh; animation: fadeIn 0.3s ease; }
-.screen.active { display: flex; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+::-webkit-scrollbar-thumb { background: var(--gray-600); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-/* Start Screen */
+#app { min-height: 100vh; position: relative; }
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
 #start-screen {
-    display: flex; align-items: center; justify-content: center; padding: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: relative; overflow: hidden;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.star-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+}
+.nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    animation: nebulaFloat 20s ease-in-out infinite;
+}
+.nebula-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%); top: -150px; left: -150px; animation-delay: 0s; }
+.nebula-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, transparent 70%); bottom: -100px; right: -100px; animation-delay: -7s; }
+.nebula-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 70%); top: 30%; right: 15%; animation-delay: -14s; }
+.nebula-4 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(245,158,11,0.3) 0%, transparent 70%); bottom: 20%; left: 10%; animation-delay: -5s; }
+@keyframes nebulaFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    25% { transform: translate(40px, -30px) scale(1.1); opacity: 0.8; }
+    50% { transform: translate(-20px, 40px) scale(0.95); opacity: 0.7; }
+    75% { transform: translate(30px, 20px) scale(1.05); opacity: 0.9; }
 }
 .start-container {
-    text-align: center; z-index: 10; max-width: 420px; padding: 3rem;
-    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
-    border-radius: var(--radius-xl); box-shadow: var(--shadow-xl);
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
 }
-.logo-section { margin-bottom: 2.5rem; }
-.logo-icon { font-size: 4rem; margin-bottom: 1rem; animation: bounce 2s ease-in-out infinite; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.game-title { font-size: 2rem; font-weight: 800; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 0.25rem; }
-.game-subtitle { font-size: 0.875rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.1em; }
-.start-menu { display: flex; flex-direction: column; gap: 0.75rem; }
+.logo-wrapper {
+    position: relative;
+    margin-bottom: 2.5rem;
+}
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: var(--primary);
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); }
+}
+.logo-icon {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+    animation: logoFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 15px 40px rgba(99,102,241,0.6));
+    position: relative;
+    z-index: 2;
+}
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+    25% { transform: translateY(-12px) scale(1.03) rotate(2deg); }
+    50% { transform: translateY(-20px) scale(1.06) rotate(0deg); }
+    75% { transform: translateY(-12px) scale(1.03) rotate(-2deg); }
+}
+.game-title {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #c7d2fe 25%, #a5b4fc 50%, #818cf8 75%, #fff 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    animation: shimmer 4s ease-in-out infinite;
+    text-shadow: 0 0 60px rgba(99,102,241,0.5);
+}
+@keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.game-subtitle {
+    font-size: 1.125rem;
+    color: var(--gray-400);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+.game-tagline {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    margin-top: 0.5rem;
+}
+.start-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 3rem;
+}
 .menu-btn {
-    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-    padding: 1rem 1.5rem; background: var(--white); border: 1px solid var(--gray-200);
-    border-radius: var(--radius-lg); font-size: 1rem; font-weight: 500; color: var(--gray-700);
-    cursor: pointer; transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 2.5rem;
+    border-radius: var(--radius-xl);
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
-.menu-btn:hover { background: var(--gray-50); border-color: var(--gray-300); transform: translateY(-2px); box-shadow: var(--shadow); }
-.menu-btn.primary { background: var(--primary); border-color: var(--primary); color: var(--white); }
-.menu-btn.primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
-.menu-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.btn-icon { font-size: 1.25rem; }
-.version-info { margin-top: 2rem; font-size: 0.75rem; color: var(--gray-400); }
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.menu-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+.menu-btn:hover::before { opacity: 1; }
+.menu-btn:hover::after { width: 300px; height: 300px; }
+.menu-btn:active { transform: scale(0.98); }
+.menu-btn.primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-glow-sm);
+}
+.menu-btn.primary:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-6px) scale(1.03);
+}
+.menu-btn.secondary {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
+}
+.menu-btn.secondary:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-4px) scale(1.02);
+}
+.menu-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.menu-btn:disabled:hover { transform: none !important; box-shadow: none; }
+.btn-icon { font-size: 1.75rem; }
+.version-info {
+    margin-top: 3rem;
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+.floating-icons {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.floating-icon {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.25;
+    animation: floatIcon 18s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+.floating-icon:nth-child(1) { top: 12%; left: 8%; animation-delay: 0s; }
+.floating-icon:nth-child(2) { top: 22%; right: 12%; animation-delay: -4s; }
+.floating-icon:nth-child(3) { top: 58%; left: 6%; animation-delay: -8s; }
+.floating-icon:nth-child(4) { top: 72%; right: 10%; animation-delay: -12s; }
+.floating-icon:nth-child(5) { top: 38%; left: 4%; animation-delay: -16s; }
+.floating-icon:nth-child(6) { bottom: 15%; left: 15%; animation-delay: -2s; }
+@keyframes floatIcon {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.25; }
+    25% { transform: translate(25px, -35px) rotate(10deg); opacity: 0.4; }
+    50% { transform: translate(10px, -50px) rotate(-5deg); opacity: 0.3; }
+    75% { transform: translate(-15px, -30px) rotate(15deg); opacity: 0.35; }
+}
 
-/* Create Screen */
-#create-screen { background: var(--gray-50); }
-.create-container { max-width: 800px; margin: 0 auto; padding: 2rem; }
-.create-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+#create-screen {
+    background: linear-gradient(180deg, var(--gray-900) 0%, #1e1b4b 50%, #312e81 100%);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+}
+.create-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.create-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-top: 1.5rem;
+}
 .back-btn {
-    padding: 0.5rem 1rem; background: var(--white); border: 1px solid var(--gray-200);
-    border-radius: var(--radius); font-size: 0.875rem; color: var(--gray-600);
-    cursor: pointer; transition: all var(--transition);
+    padding: 1rem 1.5rem;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.5rem;
 }
-.back-btn:hover { background: var(--gray-50); color: var(--gray-800); }
-.create-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--gray-900); }
+.back-btn:hover { 
+    background: rgba(255,255,255,0.1); 
+    color: white; 
+    border-color: var(--primary);
+    transform: translateX(-5px);
+}
+.create-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 .create-content { display: flex; flex-direction: column; gap: 2rem; }
-.create-section { background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); }
-.section-title { font-size: 0.875rem; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-.character-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.create-section {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+}
+.create-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.create-section:hover::before { opacity: 1; }
+.create-section:hover {
+    border-color: rgba(99,102,241,0.3);
+    transform: translateY(-3px);
+}
+.section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+}
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
 .character-card {
-    padding: 1.5rem; background: var(--gray-50); border: 2px solid transparent;
-    border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: all var(--transition);
+    background: rgba(255,255,255,0.02);
+    border: 3px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
-.character-card:hover { background: var(--gray-100); transform: translateY(-2px); }
-.character-card.selected { background: var(--primary-50); border-color: var(--primary); }
-.card-icon { font-size: 3rem; margin-bottom: 0.75rem; }
-.card-title { font-size: 1.125rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.25rem; }
-.card-desc { font-size: 0.75rem; color: var(--gray-500); line-height: 1.4; }
-.form-group { margin-bottom: 1rem; }
+.character-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.character-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.8s;
+}
+.character-card:hover { 
+    transform: translateY(-10px) rotateX(5deg); 
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(99,102,241,0.3);
+}
+.character-card:hover::before { opacity: 0.1; }
+.character-card:hover::after { transform: translateX(100%); }
+.character-card.selected {
+    border-color: var(--primary);
+    background: rgba(99,102,241,0.15);
+    box-shadow: 0 0 30px rgba(99,102,241,0.4), inset 0 0 30px rgba(99,102,241,0.1);
+}
+.character-card.selected::before { opacity: 0.2; }
+.card-icon { font-size: 4rem; margin-bottom: 1rem; position: relative; z-index: 1; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+.card-title { font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+.card-desc { font-size: 0.8rem; color: var(--gray-400); line-height: 1.5; position: relative; z-index: 1; }
+.card-glow {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    background: var(--primary);
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.character-card.selected .card-glow { opacity: 0.5; }
+.form-group { margin-bottom: 1.5rem; }
 .form-group:last-child { margin-bottom: 0; }
-.form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--gray-700); margin-bottom: 0.5rem; }
-.form-group input[type="text"], .form-group select {
-    width: 100%; padding: 0.75rem 1rem; background: var(--white); border: 1px solid var(--gray-200);
-    border-radius: var(--radius); font-size: 1rem; color: var(--gray-800); transition: all var(--transition);
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: 1rem;
 }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-100); }
-.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.form-group input[type="text"], .form-group select {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    color: white;
+    transition: all 0.4s;
+}
+.form-group input[type="text"]:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(99,102,241,0.1);
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.2), 0 0 30px rgba(99,102,241,0.2);
+}
+.form-group input[type="text"]::placeholder { color: var(--gray-500); }
+.form-group select option { background: var(--gray-800); color: white; }
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .radio-group { display: flex; gap: 1rem; }
 .radio-item {
-    display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
-    background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius);
-    cursor: pointer; transition: all var(--transition);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.4s;
+    color: var(--gray-300);
+    font-size: 1.1rem;
 }
-.radio-item:has(input:checked) { background: var(--primary-50); border-color: var(--primary); }
+.radio-item:hover { border-color: var(--primary); background: rgba(99,102,241,0.1); }
+.radio-item:has(input:checked) { background: rgba(99,102,241,0.2); border-color: var(--primary); color: white; box-shadow: 0 0 20px rgba(99,102,241,0.3); }
 .radio-item input { display: none; }
-.trait-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.trait-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .trait-card {
-    padding: 1rem; background: var(--gray-50); border: 2px solid transparent;
-    border-radius: var(--radius); text-align: center; cursor: pointer; transition: all var(--transition);
+    padding: 1.5rem 1rem;
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
-.trait-card:hover { background: var(--gray-100); }
-.trait-card.selected { background: var(--primary-50); border-color: var(--primary); }
-.trait-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
-.trait-name { font-size: 0.875rem; font-weight: 600; color: var(--gray-800); }
-.trait-effect { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem; }
-.mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.trait-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.6s;
+}
+.trait-card:hover { 
+    transform: translateY(-5px) scale(1.03); 
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(99,102,241,0.3);
+}
+.trait-card:hover::before { left: 100%; }
+.trait-card.selected { 
+    background: rgba(99,102,241,0.2); 
+    border-color: var(--primary);
+    box-shadow: 0 0 25px rgba(99,102,241,0.4);
+}
+.trait-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.trait-name { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 0.25rem; }
+.trait-effect { font-size: 0.75rem; color: var(--primary-light); margin-top: 0.5rem; font-weight: 500; }
+.mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .mode-card {
-    padding: 1.5rem; background: var(--gray-50); border: 2px solid transparent;
-    border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: all var(--transition);
+    padding: 2rem 1.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
-.mode-card:hover { background: var(--gray-100); }
-.mode-card.selected { background: var(--primary-50); border-color: var(--primary); }
-.mode-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.mode-title { font-size: 1rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.25rem; }
-.mode-desc { font-size: 0.75rem; color: var(--gray-500); }
+.mode-card:hover { 
+    transform: translateY(-8px) scale(1.02); 
+    border-color: var(--primary);
+    box-shadow: 0 15px 35px rgba(99,102,241,0.3);
+}
+.mode-card.selected { 
+    background: rgba(99,102,241,0.15); 
+    border-color: var(--primary);
+    box-shadow: 0 0 30px rgba(99,102,241,0.4);
+}
+.mode-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.mode-title { font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+.mode-desc { font-size: 0.85rem; color: var(--gray-400); line-height: 1.5; }
 .confirm-btn {
-    display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2rem;
-    background: var(--primary); border: none; border-radius: var(--radius-lg); font-size: 1rem;
-    font-weight: 600; color: var(--white); cursor: pointer; transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.75rem 3rem;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: var(--radius-xl);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: white;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-glow-sm);
+    margin-top: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
 }
-.confirm-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+.confirm-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+}
+.confirm-btn:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: var(--shadow-glow);
+}
+.confirm-btn:hover::before { left: 100%; }
 .create-section.hidden { display: none; }
 
-/* Game Screen */
-#game-screen { flex-direction: column; background: var(--gray-50); }
+#game-screen { flex-direction: column; background: var(--gray-900); min-height: 100vh; }
 .game-header {
-    display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem;
-    background: var(--white); border-bottom: 1px solid var(--gray-100); gap: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: rgba(15,23,42,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
-.player-info { display: flex; align-items: center; gap: 0.75rem; }
+.player-info { display: flex; align-items: center; gap: 1rem; }
 .player-avatar {
-    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-    background: var(--gray-100); border-radius: var(--radius); font-size: 1.5rem;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    font-size: 2rem;
+    box-shadow: var(--shadow-glow-sm);
+    border: 2px solid rgba(255,255,255,0.1);
 }
-.player-name { font-size: 0.875rem; font-weight: 600; color: var(--gray-900); }
-.player-role { font-size: 0.75rem; color: var(--gray-500); }
+.player-name { font-size: 1.125rem; font-weight: 700; color: white; }
+.player-role { font-size: 0.8rem; color: var(--primary-light); margin-top: 0.25rem; }
 .time-display { text-align: center; }
-.semester { font-size: 0.75rem; color: var(--gray-500); display: block; }
-.date { font-size: 0.875rem; font-weight: 600; color: var(--gray-800); }
-.progress-bar { height: 4px; background: var(--gray-100); border-radius: var(--radius-full); overflow: hidden; margin-top: 0.5rem; }
-.progress-fill { height: 100%; background: var(--primary); border-radius: var(--radius-full); transition: width var(--transition); }
+.semester { font-size: 0.8rem; color: var(--primary-light); display: block; font-weight: 600; letter-spacing: 0.05em; }
+.date { font-size: 1.1rem; font-weight: 700; color: white; }
+.progress-bar {
+    width: 140px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-top: 0.75rem;
+    position: relative;
+}
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: progressShine 2s linear infinite;
+}
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.progress-fill { height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full); transition: width 0.5s; position: relative; }
 .speed-control {
-    display: flex; align-items: center; gap: 0.25rem; padding: 0.25rem;
-    background: var(--gray-100); border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255,255,255,0.05);
+    padding: 0.35rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.08);
 }
 .speed-btn {
-    padding: 0.375rem 0.75rem; background: transparent; border: none; border-radius: var(--radius-sm);
-    font-size: 0.75rem; font-weight: 500; color: var(--gray-600); cursor: pointer; transition: all var(--transition);
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: all 0.3s;
 }
-.speed-btn:hover { background: var(--gray-200); }
-.speed-btn.active { background: var(--white); color: var(--primary); box-shadow: var(--shadow-sm); }
+.speed-btn:hover { color: white; background: rgba(255,255,255,0.1); }
+.speed-btn.active { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(99,102,241,0.4); }
+.game-main { display: flex; flex: 1; overflow: hidden; }
 .game-nav {
-    display: flex; flex-direction: column; width: 80px; padding: 1rem 0.5rem;
-    background: var(--white); border-right: 1px solid var(--gray-100); gap: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    padding: 1.25rem 0.75rem;
+    background: rgba(15,23,42,0.7);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    gap: 0.75rem;
 }
 .nav-btn {
-    display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 0.75rem 0.5rem;
-    background: transparent; border: none; border-radius: var(--radius); cursor: pointer; transition: all var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1rem 0.5rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--gray-500);
+    position: relative;
+    overflow: hidden;
 }
-.nav-btn:hover { background: var(--gray-50); }
-.nav-btn.active { background: var(--primary-50); }
-.nav-icon { font-size: 1.25rem; }
-.nav-text { font-size: 0.625rem; font-weight: 500; color: var(--gray-500); }
-.nav-btn.active .nav-text { color: var(--primary); }
-.game-main { display: flex; flex: 1; overflow: hidden; }
-.game-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
+.nav-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: var(--radius-lg);
+}
+.nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+.nav-btn:hover::before { opacity: 0.1; }
+.nav-btn.active { color: var(--primary-light); }
+.nav-btn.active::before { opacity: 0.2; }
+.nav-btn.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: var(--primary);
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 10px var(--primary);
+}
+.nav-icon { font-size: 1.75rem; position: relative; z-index: 1; }
+.nav-text { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; position: relative; z-index: 1; }
+.game-content { flex: 1; padding: 2rem; overflow-y: auto; }
 .page { display: none; }
-.page.active { display: block; animation: fadeIn 0.3s ease; }
-.dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.dashboard-card { background: var(--white); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm); }
-.card-title { font-size: 0.875rem; font-weight: 600; color: var(--gray-800); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.status-grid { display: flex; flex-direction: column; gap: 0.75rem; }
-.status-item { display: flex; align-items: center; gap: 0.75rem; }
-.status-label { width: 60px; font-size: 0.75rem; color: var(--gray-500); }
-.status-bar { flex: 1; height: 6px; background: var(--gray-100); border-radius: var(--radius-full); overflow: hidden; }
-.status-fill { height: 100%; border-radius: var(--radius-full); }
-.status-value { width: 40px; font-size: 0.75rem; font-weight: 600; color: var(--gray-700); text-align: right; }
-.schedule-list { display: flex; flex-direction: column; gap: 0.5rem; }
-.schedule-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: var(--gray-50); border-radius: var(--radius); }
-.schedule-time { font-size: 0.75rem; font-weight: 500; color: var(--gray-500); min-width: 45px; }
-.schedule-subject { flex: 1; font-size: 0.875rem; color: var(--gray-700); }
-.schedule-status { font-size: 0.625rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); }
-.schedule-status.completed { background: var(--secondary); color: var(--white); }
-.schedule-status.current { background: var(--primary); color: var(--white); }
-.schedule-status.pending { background: var(--gray-200); color: var(--gray-600); }
-.action-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+.page.active { display: block; animation: fadeSlideIn 0.4s ease; }
+@keyframes fadeSlideIn { 
+    from { opacity: 0; transform: translateY(15px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+.dashboard-hero {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 250px;
+    height: 250px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    filter: blur(50px);
+    animation: heroFloat 8s ease-in-out infinite;
+}
+.dashboard-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: 10%;
+    width: 180px;
+    height: 180px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: heroFloat 6s ease-in-out infinite reverse;
+}
+@keyframes heroFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -30px) scale(1.1); }
+}
+.dashboard-hero h2 { font-size: 1.75rem; font-weight: 800; margin-bottom: 0.75rem; position: relative; z-index: 1; }
+.dashboard-hero p { color: rgba(255,255,255,0.85); font-size: 1rem; position: relative; z-index: 1; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.dashboard-card {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+}
+.dashboard-card:hover { 
+    transform: translateY(-5px); 
+    border-color: rgba(99,102,241,0.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+.dashboard-card:hover::before { transform: scaleX(1); }
+.card-title { font-size: 0.9rem; font-weight: 700; color: var(--gray-300); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+.card-title span:first-child { font-size: 1.5rem; }
+.status-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+.status-item { display: flex; align-items: center; gap: 1rem; }
+.status-label { width: 55px; font-size: 0.8rem; color: var(--gray-400); font-weight: 500; }
+.status-bar { flex: 1; height: 10px; background: rgba(255,255,255,0.1); border-radius: var(--radius-full); overflow: hidden; position: relative; }
+.status-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+.status-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: statusShine 2s linear infinite;
+}
+@keyframes statusShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.status-value { width: 50px; font-size: 0.85rem; font-weight: 700; text-align: right; }
+.schedule-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s;
+    border: 1px solid transparent;
+}
+.schedule-item:hover { 
+    background: rgba(255,255,255,0.06); 
+    border-color: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+.schedule-time { font-size: 0.8rem; font-weight: 700; color: var(--gray-500); min-width: 55px; }
+.schedule-subject { flex: 1; font-size: 0.95rem; color: white; font-weight: 500; }
+.schedule-status {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.schedule-status.completed { background: rgba(16,185,129,0.2); color: var(--success); }
+.schedule-status.current { background: rgba(99,102,241,0.2); color: var(--primary-light); animation: pulse 2s ease-in-out infinite; }
+.schedule-status.pending { background: rgba(255,255,255,0.05); color: var(--gray-500); }
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.action-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 .action-btn {
-    display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 1rem;
-    background: var(--gray-50); border: none; border-radius: var(--radius); cursor: pointer; transition: all var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.75rem 1.25rem;
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
-.action-btn:hover { background: var(--gray-100); transform: translateY(-2px); }
-.action-icon { font-size: 1.5rem; }
-.action-text { font-size: 0.75rem; font-weight: 500; color: var(--gray-700); }
+.action-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.action-btn:hover {
+    background: rgba(99,102,241,0.1);
+    border-color: var(--primary);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(99,102,241,0.3);
+}
+.action-btn:hover::before { opacity: 0.1; }
+.action-icon { font-size: 2.5rem; position: relative; z-index: 1; }
+.action-text { font-size: 0.85rem; font-weight: 700; color: white; position: relative; z-index: 1; }
 
-/* Modal */
-.modal-container { position: fixed; inset: 0; z-index: var(--z-modal); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.modal-container {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
 .modal-container.hidden { display: none; }
-.modal-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); }
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+}
 .modal-content {
-    position: relative; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
-    background: var(--white); border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-xl);
-    animation: modalSlideIn 0.3s ease;
+    position: relative;
+    max-width: 650px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(99,102,241,0.2);
+    animation: modalSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-@keyframes modalSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes modalSlide {
+    from { opacity: 0; transform: scale(0.9) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-/* Toast */
-.toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: var(--z-toast); display: flex; flex-direction: column; gap: 0.5rem; }
+.toast-container {
+    position: fixed;
+    bottom: 2.5rem;
+    right: 2rem;
+    z-index: 800;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
 .toast {
-    display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem;
-    background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
-    animation: toastSlideIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+    background: rgba(30,41,59,0.95);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    animation: toastSlide 0.5s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
 }
-@keyframes toastSlideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-@keyframes toastSlideOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
-.toast.success { border-left: 4px solid var(--success); }
-.toast.error { border-left: 4px solid var(--error); }
-.toast.warning { border-left: 4px solid var(--warning); }
-.toast.info { border-left: 4px solid var(--info); }
+@keyframes toastSlide { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
+.toast.success { border-left: 5px solid var(--success); background: linear-gradient(90deg, rgba(16,185,129,0.2) 0%, rgba(30,41,59,0.95) 20%); }
+.toast.error { border-left: 5px solid var(--danger); background: linear-gradient(90deg, rgba(239,68,68,0.2) 0%, rgba(30,41,59,0.95) 20%); }
+.toast.warning { border-left: 5px solid var(--warning); background: linear-gradient(90deg, rgba(245,158,11,0.2) 0%, rgba(30,41,59,0.95) 20%); }
+.toast.info { border-left: 5px solid var(--info); background: linear-gradient(90deg, rgba(59,130,246,0.2) 0%, rgba(30,41,59,0.95) 20%); }
 
-/* Buttons */
-.btn-primary { padding: 0.75rem 1.5rem; background: var(--primary); border: none; border-radius: var(--radius); font-size: 0.875rem; font-weight: 600; color: var(--white); cursor: pointer; transition: all var(--transition); }
-.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
-.btn-secondary { padding: 0.75rem 1.5rem; background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); font-size: 0.875rem; font-weight: 500; color: var(--gray-700); cursor: pointer; transition: all var(--transition); }
-.btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-primary {
+    padding: 1.1rem 2rem;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+}
+.btn-primary:hover { 
+    transform: translateY(-3px) scale(1.02); 
+    box-shadow: var(--shadow-glow-sm);
+}
+.btn-secondary {
+    padding: 1.1rem 2rem;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: all 0.4s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.2); }
 
-/* Responsive */
 @media (max-width: 768px) {
-    .game-header { flex-wrap: wrap; gap: 0.75rem; padding: 1rem; }
-    .game-nav { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; flex-direction: row; justify-content: space-around; padding: 0.5rem; border-top: 1px solid var(--gray-100); border-right: none; z-index: 200; }
-    .game-content { padding-bottom: 80px; }
+    .game-header { flex-wrap: wrap; padding: 1rem 1.25rem; }
+    .game-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0.75rem;
+        background: rgba(15,23,42,0.98);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        z-index: 100;
+    }
+    .game-content { padding: 1.25rem; padding-bottom: 120px; }
     .dashboard-grid { grid-template-columns: 1fr; }
-    .character-grid { grid-template-columns: 1fr; }
+    .character-grid { grid-template-columns: 1fr; gap: 1rem; }
     .speed-control { display: none; }
+    .modal-content { margin: 1rem; padding: 1.75rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .trait-grid { grid-template-columns: 1fr; }
+    .mode-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-    .start-container { padding: 2rem; }
-    .game-title { font-size: 1.5rem; }
-    .modal-content { padding: 1.5rem; margin: 0.5rem; }
+    .game-title { font-size: 2.25rem; }
+    .start-container { padding: 1.25rem; }
+    .menu-btn { padding: 1.25rem 2rem; font-size: 1.1rem; }
+    .dashboard-hero { padding: 1.75rem; }
+    .dashboard-hero h2 { font-size: 1.5rem; }
 }
     </style>
 </head>
 <body>
+    <canvas id="particles-canvas"></canvas>
     <div id="app">
         <div id="start-screen" class="screen active">
+            <div class="star-field" id="star-field"></div>
+            <div class="nebula nebula-1"></div>
+            <div class="nebula nebula-2"></div>
+            <div class="nebula nebula-3"></div>
+            <div class="nebula nebula-4"></div>
+            <div class="floating-icons">
+                <div class="floating-icon">📚</div>
+                <div class="floating-icon">🎓</div>
+                <div class="floating-icon">🏆</div>
+                <div class="floating-icon">⭐</div>
+                <div class="floating-icon">✏️</div>
+                <div class="floating-icon">🌟</div>
+            </div>
             <div class="start-container">
-                <div class="logo-section">
+                <div class="logo-wrapper">
+                    <div class="logo-glow"></div>
                     <div class="logo-icon">🏫</div>
-                    <h1 class="game-title">校园梦想家</h1>
-                    <p class="game-subtitle">Campus Dreamer</p>
                 </div>
+                <h1 class="game-title">校园梦想家</h1>
+                <p class="game-subtitle">Campus Dreamer</p>
+                <p class="game-tagline">追逐梦想，从校园开始</p>
                 <div class="start-menu">
                     <button class="menu-btn primary" id="btn-new-game">
                         <span class="btn-icon">🎮</span>
-                        <span class="btn-text">新游戏</span>
+                        <span>开始游戏</span>
                     </button>
-                    <button class="menu-btn" id="btn-continue" disabled>
+                    <button class="menu-btn secondary" id="btn-continue" disabled>
                         <span class="btn-icon">📚</span>
-                        <span class="btn-text">继续游戏</span>
+                        <span>继续游戏</span>
                     </button>
-                    <button class="menu-btn" id="btn-settings">
+                    <button class="menu-btn secondary" id="btn-settings">
                         <span class="btn-icon">⚙️</span>
-                        <span class="btn-text">游戏设置</span>
+                        <span>游戏设置</span>
                     </button>
                 </div>
-                <div class="version-info">v1.0 - 开发中</div>
+                <div class="version-info">✨ v2.0 全新UI · 精心打磨</div>
             </div>
         </div>
 
         <div id="create-screen" class="screen">
             <div class="create-container">
                 <div class="create-header">
-                    <button class="back-btn" id="btn-back-to-start">← 返回</button>
-                    <h2>创建角色</h2>
+                    <button class="back-btn" id="btn-back-to-start">←</button>
+                    <h2>✨ 创建角色</h2>
                 </div>
                 <div class="create-content">
                     <div class="create-section">
                         <h3 class="section-title">选择你的角色</h3>
                         <div class="character-grid">
                             <div class="character-card selected" data-type="student">
+                                <div class="card-glow"></div>
                                 <div class="card-icon">👨‍🎓</div>
                                 <div class="card-title">学生</div>
                                 <div class="card-desc">努力学习，迎接考试，实现大学梦想</div>
                             </div>
                             <div class="character-card" data-type="teacher">
+                                <div class="card-glow"></div>
                                 <div class="card-icon">👨‍🏫</div>
                                 <div class="card-title">教师</div>
                                 <div class="card-desc">备课教学，出题考试，晋升职称</div>
                             </div>
                             <div class="character-card" data-type="principal">
+                                <div class="card-glow"></div>
                                 <div class="card-icon">👨‍💼</div>
                                 <div class="card-title">校长</div>
                                 <div class="card-desc">管理学校，招聘人才，打造名校</div>
@@ -346,7 +1093,7 @@ body {
                     <div class="create-section" id="basic-info">
                         <h3 class="section-title">基础信息</h3>
                         <div class="form-group">
-                            <label for="player-name">姓名</label>
+                            <label>✨ 姓名</label>
                             <input type="text" id="player-name" placeholder="输入你的名字" maxlength="10" value="小明">
                         </div>
                     </div>
@@ -354,52 +1101,97 @@ body {
                         <h3 class="section-title">学生设置</h3>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>性别</label>
+                                <label>👤 性别</label>
                                 <div class="radio-group">
-                                    <label class="radio-item"><input type="radio" name="gender" value="male" checked><span>男</span></label>
-                                    <label class="radio-item"><input type="radio" name="gender" value="female"><span>女</span></label>
+                                    <label class="radio-item"><input type="radio" name="gender" value="male" checked><span>👦 男</span></label>
+                                    <label class="radio-item"><input type="radio" name="gender" value="female"><span>👧 女</span></label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="grade">年级</label>
-                                <select id="grade"><option value="7">初一</option><option value="8">初二</option><option value="9">初三</option><option value="10" selected>高一</option><option value="11">高二</option><option value="12">高三</option></select>
+                                <label>📚 年级</label>
+                                <select id="grade">
+                                    <option value="7">初一</option>
+                                    <option value="8">初二</option>
+                                    <option value="9">初三</option>
+                                    <option value="10" selected>高一</option>
+                                    <option value="11">高二</option>
+                                    <option value="12">高三</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>天赋</label>
+                            <label">🌟 天赋</label>
                             <div class="trait-grid">
-                                <div class="trait-card selected" data-trait="smart"><div class="trait-icon">🧠</div><div class="trait-name">聪明</div><div class="trait-effect">学习效率+20%</div></div>
-                                <div class="trait-card" data-trait="diligent"><div class="trait-icon">📖</div><div class="trait-name">勤奋</div><div class="trait-effect">体力消耗-15%</div></div>
-                                <div class="trait-card" data-trait="athletic"><div class="trait-icon">🏃</div><div class="trait-name">运动健将</div><div class="trait-effect">体育成绩+30%</div></div>
+                                <div class="trait-card selected" data-trait="smart">
+                                    <div class="trait-icon">🧠</div>
+                                    <div class="trait-name">聪明</div>
+                                    <div class="trait-effect">学习效率+20%</div>
+                                </div>
+                                <div class="trait-card" data-trait="diligent">
+                                    <div class="trait-icon">📖</div>
+                                    <div class="trait-name">勤奋</div>
+                                    <div class="trait-effect">体力消耗-15%</div>
+                                </div>
+                                <div class="trait-card" data-trait="athletic">
+                                    <div class="trait-icon">🏃</div>
+                                    <div class="trait-name">运动健将</div>
+                                    <div class="trait-effect">体育成绩+30%</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="create-section hidden" id="teacher-options">
                         <h3 class="section-title">教师设置</h3>
                         <div class="form-group">
-                            <label for="subject">教授科目</label>
-                            <select id="subject"><option value="chinese">语文</option><option value="math" selected>数学</option><option value="english">英语</option><option value="physics">物理</option><option value="chemistry">化学</option></select>
+                            <label>📖 教授科目</label>
+                            <select id="subject">
+                                <option value="chinese">语文</option>
+                                <option value="math" selected>数学</option>
+                                <option value="english">英语</option>
+                                <option value="physics">物理</option>
+                                <option value="chemistry">化学</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label>教学模式</label>
+                            <label>🎯 教学模式</label>
                             <div class="mode-grid">
-                                <div class="mode-card selected" data-mode="casual"><div class="mode-icon">🎯</div><div class="mode-title">轻松模式</div><div class="mode-desc">简化备课，快速上手</div></div>
-                                <div class="mode-card" data-mode="professional"><div class="mode-icon">📚</div><div class="mode-title">专业模式</div><div class="mode-desc">真实备课内容，教学效果更佳</div></div>
+                                <div class="mode-card selected" data-mode="casual">
+                                    <div class="mode-icon">🎯</div>
+                                    <div class="mode-title">轻松模式</div>
+                                    <div class="mode-desc">简化备课，快速上手</div>
+                                </div>
+                                <div class="mode-card" data-mode="professional">
+                                    <div class="mode-icon">📚</div>
+                                    <div class="mode-title">专业模式</div>
+                                    <div class="mode-desc">真实备课，教学更佳</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="create-section hidden" id="principal-options">
                         <h3 class="section-title">校长设置</h3>
                         <div class="form-group">
-                            <label>管理重点</label>
+                            <label>⚡ 管理重点</label>
                             <div class="trait-grid">
-                                <div class="trait-card selected" data-trait="academic"><div class="trait-icon">📖</div><div class="trait-name">学术优先</div><div class="trait-effect">升学率+20%</div></div>
-                                <div class="trait-card" data-trait="balanced"><div class="trait-icon">⚖️</div><div class="trait-name">全面发展</div><div class="trait-effect">综合素质+15%</div></div>
-                                <div class="trait-card" data-trait="reputation"><div class="trait-icon">⭐</div><div class="trait-name">声誉建设</div><div class="trait-effect">学校知名度+25%</div></div>
+                                <div class="trait-card selected" data-trait="academic">
+                                    <div class="trait-icon">📖</div>
+                                    <div class="trait-name">学术优先</div>
+                                    <div class="trait-effect">升学率+20%</div>
+                                </div>
+                                <div class="trait-card" data-trait="balanced">
+                                    <div class="trait-icon">⚖️</div>
+                                    <div class="trait-name">全面发展</div>
+                                    <div class="trait-effect">综合素质+15%</div>
+                                </div>
+                                <div class="trait-card" data-trait="reputation">
+                                    <div class="trait-icon">⭐</div>
+                                    <div class="trait-name">声誉建设</div>
+                                    <div class="trait-effect">学校知名度+25%</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="confirm-btn" id="btn-confirm-create">🎮 开始游戏</button>
+                    <button class="confirm-btn" id="btn-confirm-create">🚀 开始游戏</button>
                 </div>
             </div>
         </div>
@@ -416,7 +1208,7 @@ body {
                 <div class="time-display">
                     <span class="semester" id="semester-display">2024学年 第一学期</span>
                     <span class="date" id="date-display">第1周 周一</span>
-                    <div class="progress-bar"><div class="progress-fill" id="time-progress" style="width: 10%"></div></div>
+                    <div class="progress-bar"><div class="progress-fill" id="time-progress" style="width: 6%"></div></div>
                 </div>
                 <div class="speed-control">
                     <button class="speed-btn" data-speed="1">1x</button>
@@ -436,17 +1228,33 @@ body {
                 </nav>
                 <div class="game-content">
                     <div class="page active" id="page-dashboard">
+                        <div class="dashboard-hero">
+                            <h2>🎓 欢迎回来，<span id="hero-name">小明</span>！</h2>
+                            <p>新的一天，新的挑战。加油向前冲！</p>
+                        </div>
                         <div class="dashboard-grid">
                             <div class="dashboard-card">
-                                <div class="card-title">📊 状态</div>
+                                <div class="card-title"><span>📊</span> 状态</div>
                                 <div class="status-grid">
-                                    <div class="status-item"><span class="status-label">心情</span><div class="status-bar"><div class="status-fill" style="width: 80%; background: var(--accent)"></div></div><span class="status-value">80%</span></div>
-                                    <div class="status-item"><span class="status-label">体力</span><div class="status-bar"><div class="status-fill" style="width: 75%; background: var(--secondary)"></div></div><span class="status-value">75%</span></div>
-                                    <div class="status-item"><span class="status-label">效率</span><div class="status-bar"><div class="status-fill" style="width: 70%; background: var(--primary)"></div></div><span class="status-value">70%</span></div>
+                                    <div class="status-item">
+                                        <span class="status-label">心情</span>
+                                        <div class="status-bar"><div class="status-fill" id="mood-bar" style="width: 80%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
+                                        <span class="status-value" id="mood-value" style="color: #fbbf24">80%</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">体力</span>
+                                        <div class="status-bar"><div class="status-fill" id="energy-bar" style="width: 75%; background: linear-gradient(90deg, #10b981, #34d399)"></div></div>
+                                        <span class="status-value" id="energy-value" style="color: #34d399">75%</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">效率</span>
+                                        <div class="status-bar"><div class="status-fill" id="efficiency-bar" style="width: 70%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
+                                        <span class="status-value" id="efficiency-value" style="color: #818cf8">70%</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="dashboard-card">
-                                <div class="card-title">📅 今日课程</div>
+                                <div class="card-title"><span>📅</span> 今日课程</div>
                                 <div class="schedule-list">
                                     <div class="schedule-item"><span class="schedule-time">08:00</span><span class="schedule-subject">数学</span><span class="schedule-status completed">已完成</span></div>
                                     <div class="schedule-item"><span class="schedule-time">09:00</span><span class="schedule-subject">语文</span><span class="schedule-status current">进行中</span></div>
@@ -454,7 +1262,7 @@ body {
                                 </div>
                             </div>
                             <div class="dashboard-card">
-                                <div class="card-title">🎯 快速行动</div>
+                                <div class="card-title"><span>🎯</span> 快速行动</div>
                                 <div class="action-buttons">
                                     <button class="action-btn" id="btn-quick-exam"><span class="action-icon">📝</span><span class="action-text">开始考试</span></button>
                                     <button class="action-btn" id="btn-exam-skip"><span class="action-icon">⏭️</span><span class="action-text">跳过考试</span></button>
@@ -465,27 +1273,38 @@ body {
                         </div>
                     </div>
                     <div class="page" id="page-exam">
-                        <div class="dashboard-grid">
-                            <div class="dashboard-card" style="grid-column: span 2;">
-                                <div class="card-title">📝 考试中心</div>
-                                <div class="action-buttons" style="grid-template-columns: repeat(3, 1fr);">
-                                    <button class="action-btn" onclick="game.startExam('math')"><span class="action-icon">📐</span><span class="action-text">数学考试</span></button>
-                                    <button class="action-btn" onclick="game.startExam('chinese')"><span class="action-icon">📜</span><span class="action-text">语文考试</span></button>
-                                    <button class="action-btn" onclick="game.startExam('english')"><span class="action-icon">🔤</span><span class="action-text">英语考试</span></button>
-                                </div>
-                            </div>
+                        <div class="dashboard-hero" style="background: linear-gradient(135deg, #059669, #10b981);">
+                            <h2>📝 考试中心</h2>
+                            <p>选择科目，开始考试检验你的学习成果</p>
+                        </div>
+                        <div class="action-buttons" style="grid-template-columns: repeat(3, 1fr);">
+                            <button class="action-btn" onclick="game.startExam('math')"><span class="action-icon">📐</span><span class="action-text">数学</span></button>
+                            <button class="action-btn" onclick="game.startExam('chinese')"><span class="action-icon">📜</span><span class="action-text">语文</span></button>
+                            <button class="action-btn" onclick="game.startExam('english')"><span class="action-icon">🔤</span><span class="action-text">英语</span></button>
                         </div>
                     </div>
                     <div class="page" id="page-social">
-                        <div class="dashboard-card"><div class="card-title">👥 社交中心</div><p style="color: var(--gray-500);">好友、社团、班干部等功能开发中...</p></div>
+                        <div class="dashboard-hero" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                            <h2>👥 社交中心</h2>
+                            <p>认识新朋友，加入社团</p>
+                        </div>
+                        <div class="dashboard-card"><p style="color: var(--gray-400); text-align: center; padding: 2.5rem; font-size: 1.1rem;">好友、社团、班干部等功能开发中...</p></div>
                     </div>
                     <div class="page" id="page-activity">
-                        <div class="dashboard-card"><div class="card-title">🎯 活动中心</div><p style="color: var(--gray-500);">体育课、运动会、社团活动等功能开发中...</p></div>
+                        <div class="dashboard-hero" style="background: linear-gradient(135deg, #dc2626, #f97316);">
+                            <h2>🎯 活动中心</h2>
+                            <p>参与精彩校园活动</p>
+                        </div>
+                        <div class="dashboard-card"><p style="color: var(--gray-400); text-align: center; padding: 2.5rem; font-size: 1.1rem;">体育课、运动会、社团活动等功能开发中...</p></div>
                     </div>
                     <div class="page" id="page-stats">
+                        <div class="dashboard-hero" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+                            <h2>📈 数据统计</h2>
+                            <p>查看你的学业表现</p>
+                        </div>
                         <div class="dashboard-grid">
-                            <div class="dashboard-card"><div class="card-title">📈 学业统计</div><p>总分排名：年级前30%</p><p>各科平均：数学85 语文78 英语82</p></div>
-                            <div class="dashboard-card"><div class="card-title">🏆 成就</div><p>暂无成就记录</p></div>
+                            <div class="dashboard-card"><div class="card-title"><span>🏆</span> 学业统计</div><p style="color: var(--gray-300); font-size: 1.05rem;">总分排名：年级前30%</p><p style="color: var(--gray-300); margin-top: 1rem; font-size: 1.05rem;">各科平均：数学85 语文78 英语82</p></div>
+                            <div class="dashboard-card"><div class="card-title"><span>🎖️</span> 成就</div><p style="color: var(--gray-400); font-size: 1.05rem;">暂无成就记录</p></div>
                         </div>
                     </div>
                 </div>
@@ -507,13 +1326,87 @@ class Game {
         this.speed = 4;
         this.isRunning = false;
         this.lastTick = 0;
-        this.storageKey = 'campus_dreamer_save';
+        this.storageKey = 'campus_dreamer_save_v3';
+        this._currentQ = 0;
+        this._currentAnswers = {};
+        this._currentSubject = '';
+        this._currentQuestions = [];
     }
 
     init() {
         this.bindEvents();
         this.checkSavedGame();
-        console.log('🎮 校园梦想家初始化完成');
+        this.initParticles();
+        this.createStars();
+    }
+
+    initParticles() {
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.hue = Math.random() > 0.7 ? 260 : (Math.random() > 0.5 ? 280 : 220);
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 70%, 70%, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle());
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        };
+        animate();
+    }
+
+    createStars() {
+        const starField = document.getElementById('star-field');
+        if (!starField) return;
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (2 + Math.random() * 2) + 's';
+            starField.appendChild(star);
+        }
     }
 
     bindEvents() {
@@ -532,14 +1425,14 @@ class Game {
 
         document.querySelectorAll('.trait-card').forEach(card => {
             card.addEventListener('click', () => {
-                document.querySelectorAll('.trait-card').forEach(c => c.classList.remove('selected'));
+                card.closest('.trait-grid').querySelectorAll('.trait-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
             });
         });
 
         document.querySelectorAll('.mode-card').forEach(card => {
             card.addEventListener('click', () => {
-                document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+                card.closest('.mode-grid').querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
             });
         });
@@ -553,16 +1446,22 @@ class Game {
         });
 
         document.getElementById('btn-quick-exam')?.addEventListener('click', () => this.startExam('math'));
-        document.getElementById('btn-exam-skip')?.addEventListener('click', () => this.skipExam());
+        document.getElementById('btn-exam-skip')?.addEventListener('click', () => this.skipExam('math'));
         document.getElementById('btn-exam-prepare')?.addEventListener('click', () => this.startExam('math'));
-        document.getElementById('btn-rest')?.addEventListener('click', () => this.showToast('体力恢复中...', 'info'));
+        document.getElementById('btn-rest')?.addEventListener('click', () => {
+            this.player.energy = Math.min(100, this.player.energy + 15);
+            this.player.mood = Math.min(100, this.player.mood + 10);
+            this.updatePlayerDisplay();
+            this.showToast('😴 休息恢复中... 体力+15% 心情+10%', 'success');
+        });
     }
 
     checkSavedGame() {
         const saved = localStorage.getItem(this.storageKey);
         if (saved) {
-            document.getElementById('btn-continue').disabled = false;
-            document.getElementById('btn-continue').addEventListener('click', () => this.continueGame(JSON.parse(saved)));
+            const btn = document.getElementById('btn-continue');
+            btn.disabled = false;
+            btn.addEventListener('click', () => this.continueGame(JSON.parse(saved)));
         }
     }
 
@@ -572,12 +1471,9 @@ class Game {
     }
 
     updateCharacterOptions(type) {
-        document.getElementById('student-options').classList.add('hidden');
-        document.getElementById('teacher-options').classList.add('hidden');
-        document.getElementById('principal-options').classList.add('hidden');
-        if (type === 'student') document.getElementById('student-options').classList.remove('hidden');
-        else if (type === 'teacher') document.getElementById('teacher-options').classList.remove('hidden');
-        else if (type === 'principal') document.getElementById('principal-options').classList.remove('hidden');
+        ['student', 'teacher', 'principal'].forEach(t => {
+            document.getElementById(`${t}-options`).classList.toggle('hidden', t !== type);
+        });
     }
 
     createCharacter() {
@@ -601,26 +1497,37 @@ class Game {
             this.player.avatar = '👨‍💼';
         }
 
+        document.getElementById('hero-name').textContent = name;
         this.updatePlayerDisplay();
         this.showScreen('game-screen');
         this.start();
-        this.showToast('欢迎来到校园梦想家！', 'success');
+        this.showToast('🎉 欢迎来到校园梦想家！', 'success');
     }
 
     continueGame(data) {
         this.player = data.player;
         this.time = data.time || this.time;
+        document.getElementById('hero-name').textContent = this.player.name;
         this.updatePlayerDisplay();
         this.showScreen('game-screen');
         this.start();
+        this.showToast('📚 继续游戏', 'info');
     }
 
     updatePlayerDisplay() {
         document.getElementById('player-avatar').textContent = this.player.avatar;
         document.getElementById('player-name-display').textContent = this.player.name;
+        const grades = ['初一', '初二', '初三', '高一', '高二', '高三'];
         document.getElementById('player-role-display').textContent = this.player.type === 'student' ? 
-            `${['初一','初二','初三','高一','高二','高三'][this.player.grade - 7]}学生` : 
+            `${grades[this.player.grade - 7]}学生` : 
             this.player.type === 'teacher' ? '教师' : '校长';
+        
+        document.getElementById('mood-value').textContent = `${this.player.mood}%`;
+        document.getElementById('mood-bar').style.width = `${this.player.mood}%`;
+        document.getElementById('energy-value').textContent = `${this.player.energy}%`;
+        document.getElementById('energy-bar').style.width = `${this.player.energy}%`;
+        document.getElementById('efficiency-value').textContent = `${this.player.efficiency}%`;
+        document.getElementById('efficiency-bar').style.width = `${this.player.efficiency}%`;
     }
 
     navigateTo(page) {
@@ -649,7 +1556,7 @@ class Game {
     }
 
     update(delta) {
-        this.time.day += delta / 100000;
+        this.time.day += delta / 50000;
         if (this.time.day >= 7) {
             this.time.day = 1;
             this.time.week++;
@@ -659,168 +1566,208 @@ class Game {
             this.time.semester = this.time.semester === 1 ? 2 : 1;
             if (this.time.semester === 1) this.time.year++;
         }
+        this.player.energy = Math.max(0, this.player.energy - delta / 500000);
+        this.player.mood = Math.max(0, this.player.mood - delta / 800000);
         this.updateTimeDisplay();
+        this.updatePlayerDisplay();
     }
 
     updateTimeDisplay() {
         const weekNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const dayIndex = Math.floor(this.time.day) % 7;
         document.getElementById('semester-display').textContent = `${this.time.year}学年 第${this.time.semester}学期`;
-        document.getElementById('date-display').textContent = `第${Math.floor(this.time.week)}周 ${weekNames[Math.floor(this.time.day) - 1] || '周日']}`;
+        document.getElementById('date-display').textContent = `第${Math.floor(this.time.week)}周 ${weekNames[dayIndex]}`;
         document.getElementById('time-progress').style.width = `${(this.time.week / 16) * 100}%`;
     }
 
     startExam(subject) {
-        const subjects = { math: '数学', chinese: '语文', english: '英语', physics: '物理', chemistry: '化学' };
+        const subjects = { math: '📐 数学', chinese: '📜 语文', english: '🔤 英语', physics: '⚗️ 物理', chemistry: '🧪 化学' };
         const questions = this.generateQuestions(subject);
+        this._currentQ = 0;
+        this._currentAnswers = {};
+        this._currentSubject = subject;
+        this._currentQuestions = questions;
         
-        const modal = document.getElementById('modal-container');
         document.getElementById('modal-content').innerHTML = `
-            <h2>📝 ${subjects[subject] || subject} 考试</h2>
-            <p style="margin: 1rem 0; color: var(--gray-600);">考试时间：60分钟 | 总分：100分</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button class="btn-primary" onclick="game.realExam('${subject}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})">✍️ 真实答题</button>
+            <h2 style="font-size: 1.75rem; margin-bottom: 1.25rem; text-align: center;">${subjects[subject] || subject} 考试</h2>
+            <div style="background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1)); border-radius: var(--radius-xl); padding: 1.5rem; margin-bottom: 2rem; border: 1px solid rgba(99,102,241,0.2);">
+                <p style="color: var(--gray-300); margin-bottom: 0.75rem;">⏱️ 考试时间：60分钟</p>
+                <p style="color: var(--gray-300); margin-bottom: 0.75rem;">📊 总分：100分</p>
+                <p style="color: var(--gray-300);">📝 题目数量：${questions.length}题</p>
+            </div>
+            <div style="display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="game.realExam()">✍️ 真实答题</button>
                 <button class="btn-secondary" onclick="game.skipExam('${subject}')">⏭️ 跳过考试</button>
                 <button class="btn-secondary" onclick="game.closeModal()">关闭</button>
             </div>
         `;
-        modal.classList.remove('hidden');
+        document.getElementById('modal-container').classList.remove('hidden');
     }
 
     generateQuestions(subject) {
-        return [
-            { id: 1, type: 'choice', q: `下列关于${subject === 'math' ? '二次函数' : subject === 'chinese' ? '汉字' : '词汇'}的说法正确的是？`, options: ['A. 正确', 'B. 错误', 'C. 不确定', 'D. 以上都不对'], answer: 0 },
-            { id: 2, type: 'fill', q: '____是学习的第一步', answer: '思考' },
-            { id: 3, type: 'judge', q: '学习可以使人进步', answer: true },
-            { id: 4, type: 'choice', q: '校园生活中最重要的是？', options: ['A. 成绩', 'B. 友谊', 'C. 健康', 'D. 以上全部'], answer: 3 },
-            { id: 5, type: 'judge', q: '团结协作比单打独斗更有效率', answer: true }
-        ];
-    }
-
-    realExam(subject, questions) {
-        let currentQ = 0;
-        const answers = {};
-
-        const renderQuestion = () => {
-            const q = questions[currentQ];
-            let input = '';
-            if (q.type === 'choice') {
-                input = `<div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
-                    ${q.options.map((opt, i) => `<label class="choice-option" style="padding: 1rem; border: 1px solid var(--gray-200); border-radius: var(--radius); cursor: pointer; ${answers[q.id] === i ? 'border-color: var(--primary); background: var(--primary-50)' : ''}">
-                        <input type="radio" name="answer" value="${i}" ${answers[q.id] === i ? 'checked' : ''}> ${opt}
-                    </label>`).join('')}
-                </div>`;
-            } else if (q.type === 'fill') {
-                input = `<div style="margin-top: 1rem;"><input type="text" id="fill-answer" value="${answers[q.id] || ''}" placeholder="请输入答案" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-200); border-radius: var(--radius);"></div>`;
-            } else if (q.type === 'judge') {
-                input = `<div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button onclick="game.submitJudge(true, ${currentQ})" style="flex: 1; padding: 1rem; border: 1px solid ${answers[q.id] === true ? 'var(--primary)' : 'var(--gray-200)'}; border-radius: var(--radius); background: ${answers[q.id] === true ? 'var(--primary-50)' : 'white'};">✓ 正确</button>
-                    <button onclick="game.submitJudge(false, ${currentQ})" style="flex: 1; padding: 1rem; border: 1px solid ${answers[q.id] === false ? 'var(--primary)' : 'var(--gray-200)'}; border-radius: var(--radius); background: ${answers[q.id] === false ? 'var(--primary-50)' : 'white'};">✗ 错误</button>
-                </div>`;
-            }
-            document.getElementById('modal-content').innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>第${currentQ + 1}题 / 共${questions.length}题</h3>
-                    <span style="color: var(--gray-500);">${q.type === 'choice' ? '选择题' : q.type === 'fill' ? '填空题' : '判断题'}</span>
-                </div>
-                <div style="background: var(--gray-50); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1rem;">${q.q}</div>
-                ${input}
-                <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
-                    <button class="btn-secondary" onclick="game.prevQuestion()" ${currentQ === 0 ? 'disabled' : ''}>← 上一题</button>
-                    <button class="btn-primary" onclick="game.nextQuestion(${currentQ}, ${questions.length}, '${subject}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})">${currentQ === questions.length - 1 ? '交卷' : '下一题 →'}</button>
-                </div>
-            `;
+        const questionBank = {
+            math: [
+                { id: 1, type: 'choice', q: '下列哪个选项是正确的？', options: ['A. 1+1=3', 'B. 1+1=2', 'C. 1+1=4', 'D. 1+1=5'], answer: 1 },
+                { id: 2, type: 'judge', q: '平行四边形的对角线互相平分', answer: true },
+                { id: 3, type: 'fill', q: '直角三角形两条直角边的平方和等于____的平方', answer: '斜边' },
+                { id: 4, type: 'choice', q: '函数y=2x+1的斜率是多少？', options: ['A. 1', 'B. 2', 'C. 3', 'D. 0'], answer: 1 },
+                { id: 5, type: 'judge', q: '负数的绝对值是正数', answer: true }
+            ],
+            chinese: [
+                { id: 1, type: 'choice', q: '"春风又绿江南岸"中"绿"字的词性是？', options: ['A. 名词', 'B. 动词', 'C. 形容词', 'D. 副词'], answer: 1 },
+                { id: 2, type: 'judge', q: '《论语》是孔子所著', answer: true },
+                { id: 3, type: 'fill', q: '《红楼梦》的作者是____', answer: '曹雪芹' },
+                { id: 4, type: 'choice', q: '下列不属于唐诗作者的是？', options: ['A. 李白', 'B. 杜甫', 'C. 白居易', 'D. 苏轼'], answer: 3 },
+                { id: 5, type: 'judge', q: '汉字是世界上唯一仍在广泛使用的表意文字', answer: true }
+            ],
+            english: [
+                { id: 1, type: 'choice', q: 'What is the past tense of "go"?', options: ['A. go', 'B. goes', 'C. going', 'D. went'], answer: 3 },
+                { id: 2, type: 'judge', q: '"I am" can be contracted to "I\'m"', answer: true },
+                { id: 3, type: 'fill', q: 'The capital of China is ____', answer: 'Beijing' },
+                { id: 4, type: 'choice', q: 'Which word means "happy"?', options: ['A. sad', 'B. angry', 'C. happy', 'D. tired'], answer: 2 },
+                { id: 5, type: 'judge', q: 'English has 26 letters', answer: true }
+            ]
         };
-
-        renderQuestion();
+        return questionBank[subject] || questionBank.math;
     }
 
-    submitJudge(value, index) {
-        this._currentAnswers = this._currentAnswers || {};
-        this._currentAnswers[index] = value;
-        this._currentQ = index;
-        this.realExam(this._currentSubject, this._currentQuestions);
+    realExam() {
+        const questions = this._currentQuestions;
+        const currentQ = this._currentQ;
+        const q = questions[currentQ];
+        let input = '';
+
+        if (q.type === 'choice') {
+            input = `<div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem;">
+                ${q.options.map((opt, i) => `<label class="radio-item" style="padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: var(--radius-lg); cursor: pointer; ${this._currentAnswers[currentQ] === i ? 'border-color: var(--primary); background: rgba(99,102,241,0.2);' : ''}">
+                    <input type="radio" name="answer" value="${i}" ${this._currentAnswers[currentQ] === i ? 'checked' : ''}> <span>${opt}</span>
+                </label>`).join('')}
+            </div>`;
+        } else if (q.type === 'fill') {
+            input = `<div style="margin-top: 1.5rem;"><input type="text" id="fill-answer" value="${this._currentAnswers[currentQ] || ''}" placeholder="请输入答案" style="width: 100%; padding: 1.25rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); color: white; font-size: 1.1rem;"></div>`;
+        } else if (q.type === 'judge') {
+            input = `<div style="display: flex; gap: 1.25rem; margin-top: 1.5rem;">
+                <button onclick="game.submitJudge(true)" style="flex: 1; padding: 1.75rem; background: ${this._currentAnswers[currentQ] === true ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.05)'}; border: 2px solid ${this._currentAnswers[currentQ] === true ? '#10b981' : 'rgba(255,255,255,0.1)'}; border-radius: var(--radius-lg); color: white; font-size: 1.35rem; cursor: pointer; transition: all 0.3s;">✓ 正确</button>
+                <button onclick="game.submitJudge(false)" style="flex: 1; padding: 1.75rem; background: ${this._currentAnswers[currentQ] === false ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.05)'}; border: 2px solid ${this._currentAnswers[currentQ] === false ? '#ef4444' : 'rgba(255,255,255,0.1)'}; border-radius: var(--radius-lg); color: white; font-size: 1.35rem; cursor: pointer; transition: all 0.3s;">✗ 错误</button>
+            </div>`;
+        }
+        
+        const typeLabels = { choice: '选择题', fill: '填空题', judge: '判断题' };
+        document.getElementById('modal-content').innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+                <h3 style="font-size: 1.25rem;">第${currentQ + 1}题 / 共${questions.length}题</h3>
+                <span style="background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.2)); padding: 0.5rem 1rem; border-radius: var(--radius-full); font-size: 0.85rem; color: var(--primary-light); font-weight: 600;">${typeLabels[q.type]}</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 1.25rem; font-size: 1.2rem; line-height: 1.9; border: 1px solid rgba(255,255,255,0.05);">${q.q}</div>
+            ${input}
+            <div style="display: flex; justify-content: space-between; margin-top: 2.5rem; gap: 1rem;">
+                <button class="btn-secondary" onclick="game.prevQuestion()" ${currentQ === 0 ? 'disabled style="opacity:0.5"' : ''}>← 上一题</button>
+                <button class="btn-primary" onclick="game.nextQuestion()">${currentQ === questions.length - 1 ? '📝 交卷' : '下一题 →'}</button>
+            </div>
+        `;
+    }
+
+    submitJudge(value) {
+        this._currentAnswers[this._currentQ] = value;
+        this.realExam();
     }
 
     prevQuestion() {
         if (this._currentQ > 0) {
             this._currentQ--;
-            this.realExam(this._currentSubject, this._currentQuestions);
+            this.realExam();
         }
     }
 
-    nextQuestion(current, total, subject, questions) {
-        this._currentSubject = subject;
-        this._currentQuestions = questions;
-        this._currentQ = current;
-
+    nextQuestion() {
         const answerInput = document.querySelector('input[name="answer"]:checked');
         const fillInput = document.getElementById('fill-answer');
         
-        if (answerInput) this._currentAnswers[current] = parseInt(answerInput.value);
-        if (fillInput) this._currentAnswers[current] = fillInput.value;
+        if (answerInput) this._currentAnswers[this._currentQ] = parseInt(answerInput.value);
+        if (fillInput) this._currentAnswers[this._currentQ] = fillInput.value;
 
-        if (current < total - 1) {
+        if (this._currentQ < this._currentQuestions.length - 1) {
             this._currentQ++;
-            this.realExam(subject, questions);
+            this.realExam();
         } else {
-            this.finishExam(subject, questions);
+            this.finishExam();
         }
     }
 
-    finishExam(subject, questions) {
+    finishExam() {
         let score = 0;
-        questions.forEach((q, i) => {
-            if (this._currentAnswers[i] === q.answer) score += 20;
+        this._currentQuestions.forEach((q, i) => {
+            if (q.type === 'choice' && this._currentAnswers[i] === q.answer) score += 20;
+            else if (q.type === 'judge' && this._currentAnswers[i] === q.answer) score += 20;
+            else if (q.type === 'fill') {
+                const userAns = (this._currentAnswers[i] || '').toString().trim().toLowerCase();
+                const correctAns = q.answer.toString().trim().toLowerCase();
+                if (userAns === correctAns || userAns.includes(correctAns) || correctAns.includes(userAns)) score += 20;
+            }
         });
         
-        const percentage = score;
-        const grade = percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : percentage >= 60 ? 'D' : 'E';
+        const grade = score >= 90 ? 'S' : score >= 80 ? 'A' : score >= 70 ? 'B' : score >= 60 ? 'C' : 'D';
+        const colors = { S: '#fbbf24', A: '#10b981', B: '#3b82f6', C: '#f59e0b', D: '#ef4444' };
+        const emojis = { S: '🏆', A: '🎉', B: '👍', C: '📚', D: '💪' };
+        const messages = { S: '完美！你是学霸！', A: '太棒了！继续保持！', B: '不错！再接再厉！', C: '及格了，继续加油！', D: '需要多多努力哦！' };
         
         document.getElementById('modal-content').innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">${score >= 60 ? '🎉' : '📚'}</div>
-                <h2>考试完成！</h2>
-                <div style="font-size: 3rem; font-weight: bold; color: var(--primary); margin: 1rem 0;">${score}分</div>
-                <p style="color: var(--gray-500);">等级：${grade}</p>
-                <button class="btn-primary" onclick="game.closeModal()" style="margin-top: 1.5rem;">完成</button>
+            <div style="text-align: center; padding: 1.5rem;">
+                <div style="font-size: 5rem; margin-bottom: 1.25rem; animation: bounce 0.6s ease;">${emojis[grade]}</div>
+                <h2 style="font-size: 1.75rem; margin-bottom: 0.75rem;">考试完成！</h2>
+                <p style="color: var(--gray-400); font-size: 1.1rem; margin-bottom: 1.5rem;">${messages[grade]}</p>
+                <div style="font-size: 5rem; font-weight: 900; color: ${colors[grade]}; margin: 1.5rem 0; text-shadow: 0 0 40px ${colors[grade]}60; animation: scorePop 0.5s ease;">${score}分</div>
+                <p style="font-size: 1.5rem; color: ${colors[grade]}; font-weight: 700;">等级：${grade}</p>
+                <button class="btn-primary" onclick="game.closeModal()" style="margin-top: 2.5rem; padding: 1.25rem 3.5rem; font-size: 1.15rem;">完成</button>
             </div>
         `;
+        <style>
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        @keyframes scorePop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        </style>
         
-        this.player.scores[subject] = score;
-        this._currentAnswers = {};
+        this.player.scores[this._currentSubject] = score;
+        this.player.efficiency = Math.min(100, this.player.efficiency + score / 20);
+        this.saveGame();
     }
 
     skipExam(subject) {
         const baseScore = this.player.scores[subject] || 75;
         const score = Math.round(baseScore * (0.85 + Math.random() * 0.2));
-        const percentage = Math.min(100, Math.max(0, score));
-        const grade = percentage >= 90 ? 'A' : percentage >= 80 ? 'B' : percentage >= 70 ? 'C' : percentage >= 60 ? 'D' : 'E';
+        const grade = score >= 90 ? 'S' : score >= 80 ? 'A' : score >= 70 ? 'B' : score >= 60 ? 'C' : 'D';
+        const colors = { S: '#fbbf24', A: '#10b981', B: '#3b82f6', C: '#f59e0b', D: '#ef4444' };
+        const emojis = { S: '🏆', A: '🎉', B: '👍', C: '📚', D: '💪' };
         
         document.getElementById('modal-content').innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">⏭️</div>
-                <h2>跳过考试</h2>
-                <div style="font-size: 3rem; font-weight: bold; color: var(--accent); margin: 1rem 0;">${percentage}分 (估算)</div>
-                <p style="color: var(--gray-500);">等级：${grade}</p>
-                <p style="color: var(--gray-400); font-size: 0.875rem; margin-top: 0.5rem;">基于平时成绩估算</p>
-                <button class="btn-primary" onclick="game.closeModal()" style="margin-top: 1.5rem;">完成</button>
+            <div style="text-align: center; padding: 1.5rem;">
+                <div style="font-size: 4.5rem; margin-bottom: 1.25rem;">⏭️</div>
+                <h2 style="font-size: 1.75rem; margin-bottom: 1rem;">跳过考试</h2>
+                <p style="color: var(--gray-400); margin-bottom: 1.5rem; font-size: 1.05rem;">基于平时成绩估算</p>
+                <div style="font-size: 4rem; font-weight: 800; color: ${colors[grade]}; margin: 1.5rem 0;">${score}分</div>
+                <p style="font-size: 1.35rem; color: ${colors[grade]}; font-weight: 700;">等级：${grade}</p>
+                <button class="btn-primary" onclick="game.closeModal()" style="margin-top: 2.5rem; padding: 1.25rem 3.5rem;">完成</button>
             </div>
         `;
-        this.player.scores[subject] = percentage;
+        this.player.scores[subject] = score;
+        this.saveGame();
     }
 
     closeModal() {
         document.getElementById('modal-container').classList.add('hidden');
         this._currentAnswers = {};
+        this._currentQ = 0;
     }
 
     showSettings() {
         document.getElementById('modal-content').innerHTML = `
-            <h2 style="margin-bottom: 1.5rem;">⚙️ 游戏设置</h2>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <button class="btn-secondary" onclick="game.saveGame()">💾 保存游戏</button>
-                <button class="btn-secondary" onclick="game.resetGame()" style="border-color: var(--error); color: var(--error);">🗑️ 重置游戏</button>
-                <button class="btn-primary" onclick="game.closeModal()" style="margin-top: 1rem;">关闭</button>
+            <h2 style="font-size: 1.75rem; margin-bottom: 2rem; text-align: center;">⚙️ 游戏设置</h2>
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <button class="btn-primary" onclick="game.saveGame()">💾 保存游戏</button>
+                <button class="btn-secondary" onclick="game.exportSave()" style="border-color: var(--info); color: var(--info);">📤 导出存档</button>
+                <button class="btn-secondary" onclick="game.importSave()" style="border-color: var(--secondary); color: var(--secondary);">📥 导入存档</button>
+                <button class="btn-secondary" onclick="game.closeModal()">关闭</button>
+                <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+                <button class="btn-secondary" onclick="game.resetGame()" style="border-color: var(--danger); color: var(--danger);">🗑️ 重置游戏</button>
             </div>
         `;
         document.getElementById('modal-container').classList.remove('hidden');
@@ -829,8 +1776,47 @@ class Game {
     saveGame() {
         const data = { player: this.player, time: this.time };
         localStorage.setItem(this.storageKey, JSON.stringify(data));
-        this.showToast('游戏已保存！', 'success');
+        this.showToast('💾 游戏已保存！', 'success');
         this.closeModal();
+    }
+
+    exportSave() {
+        const data = localStorage.getItem(this.storageKey);
+        if (data) {
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `campus-dreamer-save-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            this.showToast('📤 存档已导出！', 'success');
+        }
+    }
+
+    importSave() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    try {
+                        const data = JSON.parse(evt.target.result);
+                        localStorage.setItem(this.storageKey, JSON.stringify(data));
+                        this.showToast('📥 存档已导入！', 'success');
+                        this.closeModal();
+                        setTimeout(() => location.reload(), 1000);
+                    } catch (err) {
+                        this.showToast('❌ 导入失败！', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        };
+        input.click();
     }
 
     resetGame() {
@@ -846,7 +1832,11 @@ class Game {
         toast.className = `toast ${type}`;
         toast.innerHTML = `<span>${message}</span>`;
         container.appendChild(toast);
-        setTimeout(() => { toast.style.animation = 'toastSlideOut 0.3s ease forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
+        setTimeout(() => { 
+            toast.style.opacity = '0'; 
+            toast.style.transform = 'translateX(120%)'; 
+            setTimeout(() => toast.remove(), 400); 
+        }, 3500);
     }
 }
 
