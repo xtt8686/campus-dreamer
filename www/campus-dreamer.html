@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>校园梦想家 - Campus Dreamer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--gray-900);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+.header {
+    background: var(--gray-800);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--primary);
+    box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.game-title { font-size: 1.5rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header-info { display: flex; gap: 2rem; align-items: center; }
+.info-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+.info-item span:first-child { font-size: 1.2rem; }
+.main-content { flex: 1; display: flex; padding: 1.5rem; gap: 1.5rem; }
+.map-section { flex: 2; background: var(--gray-800); border-radius: 16px; padding: 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.map-container { position: relative; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 12px; overflow: hidden; }
+#school-map { width: 100%; height: auto; display: block; }
+.sidebar { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+.panel { background: var(--gray-800); border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+.panel-title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--primary-light); }
+.character-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 300px; overflow-y: auto; }
+.character-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+.character-item:hover { background: rgba(99,102,241,0.15); border-color: var(--primary); }
+.character-item.selected { background: rgba(99,102,241,0.2); border-color: var(--primary); box-shadow: 0 0 15px rgba(99,102,241,0.3); }
+.char-icon { font-size: 1.8rem; }
+.char-info { flex: 1; }
+.char-name { font-weight: 600; font-size: 0.95rem; }
+.char-status { font-size: 0.75rem; color: var(--gray-400); }
+.char-location { font-size: 0.7rem; color: var(--primary-light); margin-top: 0.25rem; }
+.action-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+.action-btn {
+    padding: 0.9rem;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.action-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
+.action-btn.secondary { background: rgba(255,255,255,0.1); }
+.action-btn.secondary:hover { background: rgba(255,255,255,0.2); }
+.building-legend { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
+.legend-color { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
+.speed-control { display: flex; gap: 0.5rem; }
+.speed-btn {
+    padding: 0.6rem 1rem;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 8px;
+    color: var(--gray-300);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.speed-btn:hover { background: rgba(255,255,255,0.2); }
+.speed-btn.active { background: var(--primary); color: white; }
+.notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--gray-800);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideIn 0.4s ease;
+    z-index: 100;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(8px);
+}
+.modal-overlay.hidden { display: none; }
+.modal-content {
+    background: var(--gray-800);
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center; }
+.modal-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+.modal-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.modal-btn.primary { background: var(--gradient-primary); color: white; }
+.modal-btn.secondary { background: rgba(255,255,255,0.1); color: var(--gray-300); }
+.modal-btn:hover { transform: translateY(-2px); }
+@media (max-width: 900px) {
+    .main-content { flex-direction: column; }
+    .map-section { flex: none; }
+    .sidebar { flex: none; }
+}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-left">
+                <div class="game-title">🏫 校园梦想家</div>
+            </div>
+            <div class="header-info">
+                <div class="info-item"><span>📅</span><span id="time-display">2024学年 第1学期</span></div>
+                <div class="info-item"><span>💰</span><span id="money-display">¥10,000</span></div>
+                <div class="info-item"><span>👥</span><span id="population-display">学生 0 | 教师 0</span></div>
+                <div class="speed-control">
+                    <button class="speed-btn" data-speed="1">1x</button>
+                    <button class="speed-btn active" data-speed="2">2x</button>
+                    <button class="speed-btn" data-speed="4">4x</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="map-section">
+                <div class="panel-title">🏫 学校全景</div>
+                <div class="map-container">
+                    <canvas id="school-map" width="800" height="600"></canvas>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="panel">
+                    <div class="panel-title">👥 角色列表</div>
+                    <div class="character-list" id="character-list"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">🎯 快捷操作</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="btn-add-student"><span>👨‍🎓</span> 招收学生</button>
+                        <button class="action-btn" id="btn-add-teacher"><span>👨‍🏫</span> 招聘教师</button>
+                        <button class="action-btn secondary" id="btn-upgrade"><span>🏗️</span> 升级学校</button>
+                        <button class="action-btn secondary" id="btn-settings"><span>⚙️</span> 游戏设置</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">🏠 建筑图例</div>
+                    <div class="building-legend">
+                        <div class="legend-item"><div class="legend-color" style="background: #3b82f6;"></div> 教室</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #10b981;"></div> 操场</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #f59e0b;"></div> 办公室</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #8b5cf6;"></div> 图书馆</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #ef4444;"></div> 食堂</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #6b7280;"></div> 走廊</div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <div class="modal-overlay hidden" id="modal">
+            <div class="modal-content">
+                <h2 class="modal-title" id="modal-title">操作</h2>
+                <div id="modal-body"></div>
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" onclick="closeModal()">取消</button>
+                    <button class="modal-btn primary" id="modal-confirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ============ 游戏配置 ============
+const GRID_SIZE = 20; // 网格大小
+const MAP_WIDTH = 40; // 地图宽度（格数）
+const MAP_HEIGHT = 30; // 地图高度（格数）
+
+// 建筑类型
+const BUILDINGS = {
+    EMPTY: 0,
+    CLASSROOM_MATH: 1,
+    CLASSROOM_CHINESE: 2,
+    CLASSROOM_ENGLISH: 3,
+    CLASSROOM_SCIENCE: 4,
+    OFFICE: 5,
+    LIBRARY: 6,
+    CAFETERIA: 7,
+    PLAYGROUND: 8,
+    CORRIDOR: 9,
+    GATE: 10,
+    TOILET: 11
+};
+
+// 建筑颜色
+const BUILDING_COLORS = {
+    [BUILDINGS.CLASSROOM_MATH]: '#3b82f6',
+    [BUILDINGS.CLASSROOM_CHINESE]: '#3b82f6',
+    [BUILDINGS.CLASSROOM_ENGLISH]: '#3b82f6',
+    [BUILDINGS.CLASSROOM_SCIENCE]: '#3b82f6',
+    [BUILDINGS.OFFICE]: '#f59e0b',
+    [BUILDINGS.LIBRARY]: '#8b5cf6',
+    [BUILDINGS.CAFETERIA]: '#ef4444',
+    [BUILDINGS.PLAYGROUND]: '#10b981',
+    [BUILDINGS.CORRIDOR]: '#6b7280',
+    [BUILDINGS.GATE]: '#6b7280',
+    [BUILDINGS.TOILET]: '#06b6d4'
+};
+
+const BUILDING_NAMES = {
+    [BUILDINGS.CLASSROOM_MATH]: '📐 数学教室',
+    [BUILDINGS.CLASSROOM_CHINESE]: '📜 语文教室',
+    [BUILDINGS.CLASSROOM_ENGLISH]: '🔤 英语教室',
+    [BUILDINGS.CLASSROOM_SCIENCE]: '🔬 科学教室',
+    [BUILDINGS.OFFICE]: '🏢 办公室',
+    [BUILDINGS.LIBRARY]: '📚 图书馆',
+    [BUILDINGS.CAFETERIA]: '🍽️ 食堂',
+    [BUILDINGS.PLAYGROUND]: '🏟️ 操场',
+    [BUILDINGS.TOILET]: '🚻 卫生间'
+};
+
+// 角色类型
+const CHARACTER_TYPES = {
+    STUDENT: 'student',
+    TEACHER: 'teacher',
+    PRINCIPAL: 'principal',
+    CLEANER: 'cleaner'
+};
+
+const CHARACTER_ICONS = {
+    [CHARACTER_TYPES.STUDENT]: '👨‍🎓',
+    [CHARACTER_TYPES.TEACHER]: '👨‍🏫',
+    [CHARACTER_TYPES.PRINCIPAL]: '👨‍💼',
+    [CHARACTER_TYPES.CLEANER]: '🧹'
+};
+
+const CHARACTER_COLORS = {
+    [CHARACTER_TYPES.STUDENT]: '#60a5fa',
+    [CHARACTER_TYPES.TEACHER]: '#f472b6',
+    [CHARACTER_TYPES.PRINCIPAL]: '#fbbf24',
+    [CHARACTER_TYPES.CLEANER]: '#a78bfa'
+};
+
+// ============ 游戏状态 ============
+const gameState = {
+    money: 10000,
+    time: { year: 2024, semester: 1, week: 1, day: 1 },
+    speed: 2,
+    selectedCharacter: null,
+    characters: [],
+    buildings: [],
+    notifications: []
+};
+
+// ============ 学校地图数据 ============
+function initializeSchoolMap() {
+    const map = Array(MAP_HEIGHT).fill(null).map(() => Array(MAP_WIDTH).fill(BUILDINGS.EMPTY));
+    
+    // 主教学楼（左侧）- 数学教室
+    for (let y = 2; y < 12; y++) {
+        for (let x = 2; x < 10; x++) {
+            map[y][x] = BUILDINGS.CLASSROOM_MATH;
+        }
+    }
+    
+    // 主教学楼（中左）- 语文教室
+    for (let y = 2; y < 12; y++) {
+        for (let x = 11; x < 19; x++) {
+            map[y][x] = BUILDINGS.CLASSROOM_CHINESE;
+        }
+    }
+    
+    // 主教学楼（中右）- 英语教室
+    for (let y = 2; y < 12; y++) {
+        for (let x = 20; x < 28; x++) {
+            map[y][x] = BUILDINGS.CLASSROOM_ENGLISH;
+        }
+    }
+    
+    // 科学楼（右侧）- 科学教室
+    for (let y = 2; y < 12; y++) {
+        for (let x = 30; x < 38; x++) {
+            map[y][x] = BUILDINGS.CLASSROOM_SCIENCE;
+        }
+    }
+    
+    // 一楼走廊
+    for (let x = 1; x < 39; x++) {
+        map[12][x] = BUILDINGS.CORRIDOR;
+    }
+    
+    // 二楼（下方区域）
+    // 图书馆
+    for (let y = 14; y < 22; y++) {
+        for (let x = 2; x < 14; x++) {
+            map[y][x] = BUILDINGS.LIBRARY;
+        }
+    }
+    
+    // 食堂
+    for (let y = 14; y < 22; y++) {
+        for (let x = 16; x < 28; x++) {
+            map[y][x] = BUILDINGS.CAFETERIA;
+        }
+    }
+    
+    // 办公室
+    for (let y = 14; y < 22; y++) {
+        for (let x = 30; x < 38; x++) {
+            map[y][x] = BUILDINGS.OFFICE;
+        }
+    }
+    
+    // 二楼走廊
+    for (let x = 1; x < 39; x++) {
+        map[22][x] = BUILDINGS.CORRIDOR;
+    }
+    
+    // 操场（底部）
+    for (let y = 24; y < 29; y++) {
+        for (let x = 2; x < 38; x++) {
+            map[y][x] = BUILDINGS.PLAYGROUND;
+        }
+    }
+    
+    // 卫生间
+    for (let y = 24; y < 28; y++) {
+        map[y][0] = BUILDINGS.TOILET;
+        map[y][39] = BUILDINGS.TOILET;
+    }
+    
+    // 大门
+    map[13][19] = BUILDINGS.GATE;
+    map[13][20] = BUILDINGS.GATE;
+    
+    return map;
+}
+
+// ============ 角色系统 ============
+class Character {
+    constructor(type, name, x, y) {
+        this.id = Date.now() + Math.random();
+        this.type = type;
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.targetX = x;
+        this.targetY = y;
+        this.status = 'idle';
+        this.activity = '休息中';
+        this.energy = 100;
+        this.moveSpeed = 0.02;
+    }
+    
+    moveTo(x, y) {
+        this.targetX = x;
+        this.targetY = y;
+        this.status = 'moving';
+    }
+    
+    update() {
+        // 移动逻辑
+        if (this.status === 'moving') {
+            const dx = this.targetX - this.x;
+            const dy = this.targetY - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 0.1) {
+                this.x = this.targetX;
+                this.y = this.targetY;
+                this.status = 'idle';
+            } else {
+                this.x += dx * this.moveSpeed;
+                this.y += dy * this.moveSpeed;
+            }
+        }
+        
+        // 随机移动（AI行为）
+        if (this.status === 'idle' && Math.random() < 0.005) {
+            this.randomMove();
+        }
+        
+        // 活动更新
+        this.updateActivity();
+    }
+    
+    randomMove() {
+        const moves = [
+            { dx: 1, dy: 0 },
+            { dx: -1, dy: 0 },
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 }
+        ];
+        const move = moves[Math.floor(Math.random() * moves.length)];
+        const newX = Math.max(1, Math.min(MAP_WIDTH - 2, Math.floor(this.x) + move.dx));
+        const newY = Math.max(1, Math.min(MAP_HEIGHT - 2, Math.floor(this.y) + move.dy));
+        
+        if (gameState.buildings[newY] && gameState.buildings[newY][newX] === BUILDINGS.CORRIDOR) {
+            this.moveTo(newX, newY);
+        }
+    }
+    
+    updateActivity() {
+        const hour = 8 + Math.floor(Math.random() * 10);
+        if (this.type === CHARACTER_TYPES.STUDENT) {
+            if (hour >= 8 && hour < 12) {
+                this.activity = hour % 2 === 0 ? '上课中' : '听讲中';
+            } else if (hour >= 12 && hour < 14) {
+                this.activity = '食堂用餐';
+            } else if (hour >= 14 && hour < 17) {
+                this.activity = '下午课程';
+            } else {
+                this.activity = '操场活动';
+            }
+        } else if (this.type === CHARACTER_TYPES.TEACHER) {
+            this.activity = hour >= 8 && hour < 17 ? '授课中' : '办公室备课';
+        } else if (this.type === CHARACTER_TYPES.PRINCIPAL) {
+            this.activity = '巡视学校';
+        }
+    }
+    
+    getLocationName() {
+        const bx = Math.floor(this.x);
+        const by = Math.floor(this.y);
+        
+        if (by >= 2 && by < 12) {
+            if (bx >= 2 && bx < 10) return '📐 数学教学楼';
+            if (bx >= 11 && bx < 19) return '📜 语文教学楼';
+            if (bx >= 20 && bx < 28) return '🔤 英语教学楼';
+            if (bx >= 30 && bx < 38) return '🔬 科学教学楼';
+        }
+        if (by >= 14 && by < 22) {
+            if (bx >= 2 && bx < 14) return '📚 图书馆';
+            if (bx >= 16 && bx < 28) return '🍽️ 食堂';
+            if (bx >= 30 && bx < 38) return '🏢 办公室';
+        }
+        if (by >= 24 && by < 29) return '🏟️ 操场';
+        if (by >= 12 || by === 22) return '🚶 走廊';
+        return '🏫 校园';
+    }
+}
+
+// ============ 渲染系统 ============
+class GameRenderer {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.resize();
+        
+        window.addEventListener('resize', () => this.resize());
+    }
+    
+    resize() {
+        const container = this.canvas.parentElement;
+        const width = container.clientWidth;
+        const height = width * (MAP_HEIGHT / MAP_WIDTH);
+        
+        this.canvas.width = width;
+        this.canvas.height = height;
+        
+        this.cellWidth = width / MAP_WIDTH;
+        this.cellHeight = height / MAP_HEIGHT;
+    }
+    
+    render() {
+        const ctx = this.ctx;
+        const cw = this.cellWidth;
+        const ch = this.cellHeight;
+        
+        // 清空画布
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // 绘制网格线
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= MAP_WIDTH; x++) {
+            ctx.beginPath();
+            ctx.moveTo(x * cw, 0);
+            ctx.lineTo(x * cw, this.canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y <= MAP_HEIGHT; y++) {
+            ctx.beginPath();
+            ctx.moveTo(0, y * ch);
+            ctx.lineTo(this.canvas.width, y * ch);
+            ctx.stroke();
+        }
+        
+        // 绘制建筑
+        for (let y = 0; y < MAP_HEIGHT; y++) {
+            for (let x = 0; x < MAP_WIDTH; x++) {
+                const building = gameState.buildings[y][x];
+                if (building !== BUILDINGS.EMPTY) {
+                    this.drawBuilding(x, y, building, cw, ch);
+                }
+            }
+        }
+        
+        // 绘制角色
+        gameState.characters.forEach(char => {
+            this.drawCharacter(char, cw, ch);
+        });
+        
+        // 绘制选中特效
+        if (gameState.selectedCharacter) {
+            this.drawSelection(gameState.selectedCharacter, cw, ch);
+        }
+    }
+    
+    drawBuilding(x, y, type, cw, ch) {
+        const ctx = this.ctx;
+        const px = x * cw;
+        const py = y * ch;
+        
+        // 建筑背景
+        ctx.fillStyle = BUILDING_COLORS[type] || '#374151';
+        ctx.fillRect(px + 1, py + 1, cw - 2, ch - 2);
+        
+        // 建筑边框
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(px + 1, py + 1, cw - 2, ch - 2);
+        
+        // 建筑图标（如果格子够大）
+        if (cw > 15) {
+            ctx.font = `${Math.min(cw, ch) * 0.6}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            const icons = {
+                [BUILDINGS.CLASSROOM_MATH]: '📐',
+                [BUILDINGS.CLASSROOM_CHINESE]: '📜',
+                [BUILDINGS.CLASSROOM_ENGLISH]: '🔤',
+                [BUILDINGS.CLASSROOM_SCIENCE]: '🔬',
+                [BUILDINGS.OFFICE]: '🏢',
+                [BUILDINGS.LIBRARY]: '📚',
+                [BUILDINGS.CAFETERIA]: '🍽️',
+                [BUILDINGS.PLAYGROUND]: '🏟️',
+                [BUILDINGS.CORRIDOR]: '',
+                [BUILDINGS.GATE]: '🚪',
+                [BUILDINGS.TOILET]: '🚻'
+            };
+            
+            const icon = icons[type];
+            if (icon) {
+                ctx.fillText(icon, px + cw / 2, py + ch / 2);
+            }
+        }
+    }
+    
+    drawCharacter(char, cw, ch) {
+        const ctx = this.ctx;
+        const px = char.x * cw;
+        const py = char.y * ch;
+        const radius = Math.min(cw, ch) * 0.35;
+        
+        // 角色阴影
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.ellipse(px + cw/2, py + ch/2 + 2, radius * 0.8, radius * 0.3, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // 角色圆形背景
+        ctx.fillStyle = CHARACTER_COLORS[char.type];
+        ctx.beginPath();
+        ctx.arc(px + cw / 2, py + ch / 2, radius, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // 角色边框
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // 角色图标
+        ctx.font = `${radius * 1.4}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(CHARACTER_ICONS[char.type], px + cw / 2, py + ch / 2);
+        
+        // 状态指示
+        if (char.status === 'moving') {
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(px + cw - 3, py + 3, 4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    drawSelection(char, cw, ch) {
+        const ctx = this.ctx;
+        const px = char.x * cw;
+        const py = char.y * ch;
+        const radius = Math.min(cw, ch) * 0.5;
+        
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.arc(px + cw / 2, py + ch / 2, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+    
+    handleClick(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / this.cellWidth;
+        const y = (event.clientY - rect.top) / this.cellHeight;
+        
+        // 检查是否点击了角色
+        for (const char of gameState.characters) {
+            const dist = Math.sqrt(Math.pow(char.x - x, 2) + Math.pow(char.y - y, 2));
+            if (dist < 1) {
+                selectCharacter(char);
+                return;
+            }
+        }
+        
+        // 检查是否点击了建筑
+        const bx = Math.floor(x);
+        const by = Math.floor(y);
+        if (bx >= 0 && bx < MAP_WIDTH && by >= 0 && by < MAP_HEIGHT) {
+            const building = gameState.buildings[by][bx];
+            if (building !== BUILDINGS.EMPTY) {
+                showNotification(`📍 ${BUILDING_NAMES[building]} (${bx}, ${by})`);
+            }
+        }
+        
+        // 如果选中角色，移动到点击位置
+        if (gameState.selectedCharacter && 
+            bx >= 0 && bx < MAP_WIDTH && 
+            by >= 0 && by < MAP_HEIGHT) {
+            const building = gameState.buildings[by][bx];
+            if (building === BUILDINGS.CORRIDOR || building === BUILDINGS.PLAYGROUND) {
+                gameState.selectedCharacter.moveTo(bx, by);
+            } else {
+                showNotification('❌ 该区域不可进入');
+            }
+        }
+    }
+}
+
+// ============ UI 系统 ============
+function updateCharacterList() {
+    const list = document.getElementById('character-list');
+    list.innerHTML = '';
+    
+    gameState.characters.forEach(char => {
+        const item = document.createElement('div');
+        item.className = `character-item ${gameState.selectedCharacter?.id === char.id ? 'selected' : ''}`;
+        item.onclick = () => selectCharacter(char);
+        
+        item.innerHTML = `
+            <span class="char-icon">${CHARACTER_ICONS[char.type]}</span>
+            <div class="char-info">
+                <div class="char-name">${char.name}</div>
+                <div class="char-status">${char.activity}</div>
+                <div class="char-location">${char.getLocationName()}</div>
+            </div>
+        `;
+        
+        list.appendChild(item);
+    });
+    
+    document.getElementById('population-display').textContent = 
+        `学生 ${gameState.characters.filter(c => c.type === CHARACTER_TYPES.STUDENT).length} | 教师 ${gameState.characters.filter(c => c.type === CHARACTER_TYPES.TEACHER).length}`;
+}
+
+function selectCharacter(char) {
+    gameState.selectedCharacter = char;
+    updateCharacterList();
+}
+
+function updateUI() {
+    document.getElementById('time-display').textContent = 
+        `${gameState.time.year}学年 第${gameState.time.semester}学期 第${gameState.time.week}周`;
+    document.getElementById('money-display').textContent = `¥${gameState.money.toLocaleString()}`;
+    updateCharacterList();
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `<span>${message}</span>`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+function showModal(title, body, onConfirm) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = body;
+    document.getElementById('modal-confirm').onclick = onConfirm;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+// ============ 游戏控制 ============
+function addCharacter(type) {
+    const names = {
+        [CHARACTER_TYPES.STUDENT]: ['小明', '小红', '小华', '小丽', '小强', '小芳', '小军', '小美'],
+        [CHARACTER_TYPES.TEACHER]: ['张老师', '李老师', '王老师', '刘老师', '陈老师'],
+        [CHARACTER_TYPES.PRINCIPAL]: ['校长']
+    };
+    
+    const positions = [
+        { x: 19, y: 12 }, // 走廊
+        { x: 20, y: 12 },
+        { x: 21, y: 12 },
+        { x: 18, y: 12 },
+        { x: 17, y: 12 }
+    ];
+    
+    const existingNames = gameState.characters.map(c => c.name);
+    const availableNames = names[type].filter(n => !existingNames.includes(n));
+    
+    if (availableNames.length === 0) {
+        showNotification('❌ 无法添加更多角色');
+        return;
+    }
+    
+    const pos = positions[gameState.characters.length % positions.length];
+    const char = new Character(type, availableNames[0], pos.x, pos.y);
+    gameState.characters.push(char);
+    
+    const costs = {
+        [CHARACTER_TYPES.STUDENT]: 1000,
+        [CHARACTER_TYPES.TEACHER]: 3000
+    };
+    
+    if (costs[type]) {
+        gameState.money -= costs[type];
+    }
+    
+    updateUI();
+    showNotification(`✅ ${char.name} 加入学校！`);
+}
+
+function setupEventListeners() {
+    // 速度控制
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            gameState.speed = parseInt(btn.dataset.speed);
+        });
+    });
+    
+    // 添加角色按钮
+    document.getElementById('btn-add-student').addEventListener('click', () => {
+        if (gameState.money >= 1000) {
+            addCharacter(CHARACTER_TYPES.STUDENT);
+        } else {
+            showNotification('❌ 资金不足！');
+        }
+    });
+    
+    document.getElementById('btn-add-teacher').addEventListener('click', () => {
+        if (gameState.money >= 3000) {
+            addCharacter(CHARACTER_TYPES.TEACHER);
+        } else {
+            showNotification('❌ 资金不足！');
+        }
+    });
+    
+    // 设置按钮
+    document.getElementById('btn-settings').addEventListener('click', () => {
+        showModal('⚙️ 游戏设置', `
+            <p style="text-align: center; color: var(--gray-400);">
+                当前资金: ¥${gameState.money.toLocaleString()}<br><br>
+                <button class="modal-btn secondary" onclick="gameState.money += 5000; closeModal(); updateUI();">💰 增加资金</button>
+            </p>
+        `, closeModal);
+    });
+    
+    // 地图点击
+    renderer.canvas.addEventListener('click', (e) => renderer.handleClick(e));
+}
+
+// ============ 游戏主循环 ============
+let lastTime = 0;
+let timeAccumulator = 0;
+
+function gameLoop(timestamp) {
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+    
+    timeAccumulator += deltaTime * gameState.speed;
+    
+    // 每秒更新时间
+    if (timeAccumulator >= 1000) {
+        timeAccumulator -= 1000;
+        gameState.time.day++;
+        
+        if (gameState.time.day > 7) {
+            gameState.time.day = 1;
+            gameState.time.week++;
+            
+            if (gameState.time.week > 16) {
+                gameState.time.week = 1;
+                gameState.time.semester = gameState.time.semester === 1 ? 2 : 1;
+                if (gameState.time.semester === 1) {
+                    gameState.time.year++;
+                }
+            }
+        }
+        
+        // 随机收入
+        if (gameState.time.day === 1) {
+            gameState.money += gameState.characters.filter(c => c.type === CHARACTER_TYPES.STUDENT).length * 100;
+        }
+        
+        updateUI();
+    }
+    
+    // 更新角色
+    gameState.characters.forEach(char => char.update());
+    
+    // 渲染
+    renderer.render();
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// ============ 初始化 ============
+const renderer = new GameRenderer(document.getElementById('school-map'));
+gameState.buildings = initializeSchoolMap();
+
+// 添加初始角色
+addCharacter(CHARACTER_TYPES.PRINCIPAL);
+for (let i = 0; i < 3; i++) addCharacter(CHARACTER_TYPES.STUDENT);
+addCharacter(CHARACTER_TYPES.TEACHER);
+
+setupEventListeners();
+updateUI();
+requestAnimationFrame(gameLoop);
+
+console.log('🏫 校园梦想家 启动成功！');
+console.log('📌 点击角色可查看详情，点击走廊可移动角色');
+</script>
+</body>
+</html>
